@@ -4,7 +4,8 @@ class BaseException implements Exception {
 }
 
 class ServerException extends BaseException {
-  ServerException(String message) : super(message);
+  ServerException(String? message, int statusCode)
+      : super(message ?? 'Error $statusCode intentado conectar al servidor');
 }
 
 class LoginFailedException extends BaseException {
@@ -12,7 +13,8 @@ class LoginFailedException extends BaseException {
 }
 
 class NotFoundException extends BaseException {
-  NotFoundException(String message) : super(message);
+  NotFoundException([String message = 'Recurso no encontrado.'])
+      : super(message);
 }
 
 class UnknownErrorException extends BaseException {
@@ -20,5 +22,6 @@ class UnknownErrorException extends BaseException {
 }
 
 class NotAuthorizedException extends BaseException {
-  NotAuthorizedException(String message) : super(message);
+  NotAuthorizedException([String message = 'Permisos insuficientes'])
+      : super(message);
 }

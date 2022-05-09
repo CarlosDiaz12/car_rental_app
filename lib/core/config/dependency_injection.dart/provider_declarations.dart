@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_movies_app/core/constants/remote_constants.dart';
-import 'package:flutter_movies_app/data/repository/example_repository.dart';
+import 'package:flutter_movies_app/data/repository/vehicle_type_repository.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
@@ -21,8 +21,8 @@ class DependencyInjection {
   ];
 
   static final List<SingleChildWidget> _repositoryProviders = [
-    ProxyProvider<Dio, ExampleRepository>(
-      update: (context, dioClient, _) => ExampleRepository(
+    ProxyProvider<Dio, VehicleTypeRepository>(
+      update: (context, dioClient, _) => VehicleTypeRepository(
         client: dioClient,
       ),
     ),

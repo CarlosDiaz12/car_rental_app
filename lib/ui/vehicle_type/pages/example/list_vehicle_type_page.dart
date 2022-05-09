@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_movies_app/data/repository/example_repository.dart';
-import 'package:flutter_movies_app/ui/pages/example/example_viewmodel.dart';
+import 'package:flutter_movies_app/data/repository/vehicle_type_repository.dart';
+import 'package:flutter_movies_app/ui/vehicle_type/pages/example/list_vehicle_type_viewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
 
-class ExamplePage extends StatelessWidget {
-  const ExamplePage({Key? key}) : super(key: key);
+class ListVehicleTypePage extends StatelessWidget {
+  const ListVehicleTypePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<ExampleViewModel>.nonReactive(
-        viewModelBuilder: () => ExampleViewModel(
-              repository: Provider.of<ExampleRepository>(context),
+    return ViewModelBuilder<ListVehicleTypeViewModel>.nonReactive(
+        viewModelBuilder: () => ListVehicleTypeViewModel(
+              repository: Provider.of<VehicleTypeRepository>(context),
             ),
         builder: (context, viewModel, _) {
           return Scaffold(
@@ -23,7 +23,7 @@ class ExamplePage extends StatelessWidget {
                 Text('Example Page'),
                 ElevatedButton(
                   onPressed: () {
-                    //viewModel.hello();
+                    viewModel.loadData();
                   },
                   child: Text('Call API'),
                 ),
