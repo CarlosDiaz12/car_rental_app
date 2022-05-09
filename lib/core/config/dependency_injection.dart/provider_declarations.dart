@@ -38,7 +38,7 @@ class DependencyInjection {
     ),
      */
   ];
-
+/*
   static final List<SingleChildWidget> _uiProviders = [
     /*
     example:
@@ -49,7 +49,7 @@ class DependencyInjection {
     ),
      */
   ];
-
+*/
   static Future<void> setup() async {
     _providers = [..._networkProviders, ..._repositoryProviders];
   }
@@ -57,7 +57,6 @@ class DependencyInjection {
   static Dio _initHttpClient() {
     var client = Dio(
       BaseOptions(
-        // TODO: change later
         baseUrl: RemoteConstants.API_URL_BASE,
       ),
     );
