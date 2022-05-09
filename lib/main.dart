@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_movies_app/core/config/dependency_injection.dart/provider_declarations.dart';
+import 'package:car_rental_app/core/config/dependency_injection.dart/provider_declarations.dart';
 import 'package:provider/provider.dart';
 import 'core/config/routing/routes.gr.dart';
 
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp.router(
         routerDelegate: _appRouter.delegate(),
         routeInformationParser: _appRouter.defaultRouteParser(),
-        title: 'Flutter Base Project',
+        title: 'Flutter Car Rental App',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),

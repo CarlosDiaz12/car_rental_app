@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_movies_app/core/error/exceptions.dart';
-import 'package:flutter_movies_app/data/remote/response/get_all_vehicle_type_response.dart';
-import 'package:flutter_movies_app/domain/models/vehicle_type.dart';
-import 'package:flutter_movies_app/domain/repository/vehicle_type_respository_abstract.dart';
+import 'package:car_rental_app/core/error/exceptions.dart';
+import 'package:car_rental_app/data/remote/response/get_all_vehicle_type_response.dart';
+import 'package:car_rental_app/domain/models/vehicle_type.dart';
+import 'package:car_rental_app/domain/repository/vehicle_type_respository_abstract.dart';
 
 class VehicleTypeRepository extends VehicleTypeRepositoryAbstract {
   final Dio _client;

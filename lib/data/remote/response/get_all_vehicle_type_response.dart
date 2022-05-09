@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_movies_app/domain/models/vehicle_type.dart';
+import 'package:car_rental_app/domain/models/vehicle_type.dart';
 
 class GetAllVehicleTypeResponse {
   bool? success;

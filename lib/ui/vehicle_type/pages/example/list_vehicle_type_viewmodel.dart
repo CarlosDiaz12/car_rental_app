@@ -1,5 +1,5 @@
-import 'package:flutter_movies_app/data/repository/vehicle_type_repository.dart';
-import 'package:flutter_movies_app/domain/models/vehicle_type.dart';
+import 'package:car_rental_app/data/repository/vehicle_type_repository.dart';
+import 'package:car_rental_app/domain/models/vehicle_type.dart';
 import 'package:stacked/stacked.dart';
 
 class ListVehicleTypeViewModel extends BaseViewModel {
@@ -15,7 +15,6 @@ class ListVehicleTypeViewModel extends BaseViewModel {
     var res = await repository.getAll();
     res.fold((ex) {
       setError(ex);
-      print('Error');
     }, (data) {
       _vehicleTypeList = data;
     });
