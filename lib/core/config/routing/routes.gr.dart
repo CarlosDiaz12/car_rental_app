@@ -13,7 +13,7 @@
 import 'package:auto_route/auto_route.dart' as _i3;
 import 'package:flutter/material.dart' as _i4;
 import 'package:car_rental_app/main.dart' as _i1;
-import 'package:car_rental_app/ui/vehicle_type/pages/example/list_vehicle_type_page.dart'
+import 'package:car_rental_app/ui/vehicle_type/pages/list_vehicle_type/list_vehicle_type_page.dart'
     as _i2;
 
 class AppRouter extends _i3.RootStackRouter {

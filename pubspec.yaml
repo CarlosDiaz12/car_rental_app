@@ -41,6 +41,9 @@ dependencies:
   # mvvm
   stacked: ^2.3.0
 
+  # ui
+  fluent_ui: ^3.11.1
+
   # ENV variables
   flutter_dotenv: ^5.0.2
 dev_dependencies:
