@@ -43,6 +43,7 @@ class _CreateEditVehicleTypeState extends State<CreateEditVehicleType> {
                   placeholder: 'Descripcion',
                   validator: (String? text) {
                     if (text == null || text.isEmpty) return 'Requerido';
+                    return null;
                   },
                 ),
                 Checkbox(

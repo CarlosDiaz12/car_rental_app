@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:car_rental_app/core/config/dependency_injection.dart/provider_declarations.dart';
