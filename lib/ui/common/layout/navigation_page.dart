@@ -1,3 +1,4 @@
+import 'package:car_rental_app/ui/brand/pages/list_brand/list_brand_page.dart';
 import 'package:car_rental_app/ui/common/layout/layout_page_viewmodel.dart';
 import 'package:car_rental_app/ui/vehicle_type/pages/list_vehicle_type/list_vehicle_type_page.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -16,7 +17,9 @@ class NavigationPage extends StatelessWidget {
           pane: NavigationPane(
             selected: viewModel.currentIndex,
             displayMode: PaneDisplayMode.auto,
-            onChanged: (int index) {},
+            onChanged: (int index) {
+              viewModel.changePageIndex(index);
+            },
             header: Padding(
               padding: EdgeInsets.only(left: 12),
               child: DefaultTextStyle(
@@ -28,14 +31,16 @@ class NavigationPage extends StatelessWidget {
               PaneItem(
                 icon: Icon(FluentIcons.car),
                 title: Text('Tipos de Vehiculos'),
+              ),
+              PaneItem(
+                icon: Icon(FluentIcons.verified_brand_solid),
+                title: Text('Marcas'),
               )
             ],
           ),
           content: NavigationBody(
             index: viewModel.currentIndex,
-            children: [
-              ListVehicleTypePage(),
-            ],
+            children: [ListVehicleTypePage(), ListBrandPage()],
           ),
         );
       },
