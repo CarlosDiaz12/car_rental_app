@@ -36,6 +36,9 @@ class _CreateEditVehicleTypeState extends State<CreateEditVehicleType> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextFormBox(
+                  initialValue: widget.action == FORM_ACTION.CREATE
+                      ? formData.description
+                      : widget.data?.description,
                   onSaved: ((newValue) => formData.description = newValue),
                   placeholder: 'Descripcion',
                   validator: (String? text) {

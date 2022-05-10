@@ -4,7 +4,9 @@ import 'package:car_rental_app/ui/common/view_utils.dart';
 import 'package:car_rental_app/ui/common/widgets/table_widget.dart';
 import 'package:car_rental_app/ui/vehicle_type/pages/list_vehicle_type/create_edit_vehicle_type/create_edit_vehicle_type.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:car_rental_app/data/repository/vehicle_type_repository.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
 
@@ -41,21 +43,8 @@ class ListVehicleTypePage extends StatelessWidget {
                       children: [
                         Button(
                           onPressed: () async {
-                            var response = await showDialog<VehicleType?>(
-                              context: context,
-                              builder: (context) {
-                                return CreateEditVehicleType(
-                                    action: FORM_ACTION.CREATE);
-                              },
-                            );
-
-                            if (response != null) {
-                              _showLoading(context);
-                              await viewModel.create(response);
-                              AutoRouter.of(context).pop();
-                            }
-
-                            viewModel.loadData();
+                            manageCreateEdit(
+                                context, FORM_ACTION.CREATE, viewModel, null);
                           },
                           child: Text('Agregar'),
                         ),
@@ -64,9 +53,15 @@ class ListVehicleTypePage extends StatelessWidget {
                           columnNames: viewModel.columnNames,
                           rows: [
                             ...viewModel.list!.map(
-                              (e) => TableRow(
-                                children: [
-                                  ViewUtils.buildTableCell(e.id),
+                              (e) => DataRow(
+                                cells: [
+                                  ViewUtils.buildTableCell(
+                                    e.id,
+                                    onTap: () {
+                                      manageCreateEdit(context,
+                                          FORM_ACTION.UPDATE, viewModel, e);
+                                    },
+                                  ),
                                   ViewUtils.buildTableCell(e.description),
                                   ViewUtils.buildTableCell((e.status == true)
                                       ? 'Activo'
@@ -85,8 +80,34 @@ class ListVehicleTypePage extends StatelessWidget {
     );
   }
 
+  Future<void> manageCreateEdit(BuildContext context, FORM_ACTION action,
+      ListVehicleTypeViewModel viewModel, VehicleType? data) async {
+    var response = await fluent.showDialog<VehicleType?>(
+      context: context,
+      builder: (context) {
+        return CreateEditVehicleType(
+          action: action,
+          data: data,
+        );
+      },
+    );
+
+    if (response != null) {
+      _showLoading(context);
+      if (action == FORM_ACTION.CREATE) {
+        await viewModel.create(response);
+      } else {
+        await viewModel.update(response);
+      }
+
+      AutoRouter.of(context).pop();
+    }
+
+    viewModel.loadData();
+  }
+
   Future<void> _showLoading(BuildContext context) async {
-    await showDialog<VehicleType?>(
+    await fluent.showDialog<VehicleType?>(
       context: context,
       builder: (context) {
         return ContentDialog(

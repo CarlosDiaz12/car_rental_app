@@ -25,7 +25,6 @@ class ListVehicleTypeViewModel extends BaseViewModel {
 
   Future<bool> create(VehicleType data) async {
     clearErrors();
-    //setBusyForObject(_vehicleTypeList, true);
     var res = await repository.create(data);
     var response = false;
     res.fold((ex) {
@@ -34,6 +33,17 @@ class ListVehicleTypeViewModel extends BaseViewModel {
       response = data;
     });
     return response;
-    //setBusyForObject(_vehicleTypeList, false);
+  }
+
+  Future<bool> update(VehicleType data) async {
+    clearErrors();
+    var res = await repository.update(data);
+    var response = false;
+    res.fold((ex) {
+      setError(ex);
+    }, (data) {
+      response = data;
+    });
+    return response;
   }
 }
