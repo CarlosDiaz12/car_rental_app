@@ -49,6 +49,11 @@ class DependencyInjection {
         client: dioClient,
       ),
     ),
+    ProxyProvider<Dio, VehicleTypeRepositoryAbstract>(
+      update: (context, dioClient, _) => VehicleTypeRepository(
+        client: dioClient,
+      ),
+    ),
     /*Provider.value(value: ExampleRepository),*/
 
     /*
