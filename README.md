@@ -1,4 +1,4 @@
-# flutter_movies_app
+# car_rental_system
 
 A new Flutter project.
 

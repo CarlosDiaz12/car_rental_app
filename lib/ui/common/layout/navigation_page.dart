@@ -2,6 +2,7 @@ import 'package:car_rental_app/ui/brand/pages/list_brand/list_brand_page.dart';
 import 'package:car_rental_app/ui/common/layout/layout_page_viewmodel.dart';
 import 'package:car_rental_app/ui/fuel_type/pages/list_fuel_type/list_fuel_type_page.dart';
 import 'package:car_rental_app/ui/model/pages/list_model/list_model_page.dart';
+import 'package:car_rental_app/ui/vehicle/pages/list_vehicle/list_vehicle_page.dart';
 import 'package:car_rental_app/ui/vehicle_type/pages/list_vehicle_type/list_vehicle_type_page.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:stacked/stacked.dart';
@@ -45,6 +46,10 @@ class NavigationPage extends StatelessWidget {
               PaneItem(
                 icon: Icon(FluentIcons.transportation),
                 title: Text('Tipos de Combustibles'),
+              ),
+              PaneItem(
+                icon: Icon(FluentIcons.car),
+                title: Text('Vehiculos'),
               )
             ],
           ),
@@ -54,7 +59,8 @@ class NavigationPage extends StatelessWidget {
               ListVehicleTypePage(),
               ListBrandPage(),
               ListModelPage(),
-              ListFuelTypePage()
+              ListFuelTypePage(),
+              ListVehiclePage()
             ],
           ),
         );

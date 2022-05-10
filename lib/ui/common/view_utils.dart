@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ViewUtils {
   static DataCell buildTableCell(dynamic e, {Function()? onTap}) => DataCell(
@@ -42,4 +43,7 @@ class ViewUtils {
           )
         ],
       );
+
+  static FilteringTextInputFormatter numericInputFormatter() =>
+      FilteringTextInputFormatter.allow(RegExp(r'[0-9]'));
 }
