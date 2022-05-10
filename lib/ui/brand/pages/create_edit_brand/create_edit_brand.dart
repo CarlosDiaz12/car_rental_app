@@ -39,7 +39,13 @@ class _CreateEditBrandState extends State<CreateEditBrand> {
                   initialValue: widget.action == FORM_ACTION.CREATE
                       ? formData.description
                       : widget.data?.description,
-                  onSaved: ((newValue) => formData.description = newValue),
+                  onSaved: ((newValue) {
+                    if (widget.action == FORM_ACTION.CREATE) {
+                      formData.description = newValue;
+                    } else {
+                      widget.data?.description = newValue;
+                    }
+                  }),
                   placeholder: 'Descripcion',
                   validator: (String? text) {
                     if (text == null || text.isEmpty) return 'Requerido';
