@@ -75,6 +75,17 @@ class ListVehiclePage extends StatelessWidget {
                                     },
                                   ),
                                   ViewUtils.buildTableCell(e.description),
+                                  ViewUtils.buildTableCell(e.chassisNumber),
+                                  ViewUtils.buildTableCell(e.engineNumber),
+                                  ViewUtils.buildTableCell(e.plateNumber),
+                                  ViewUtils.buildTableCell(
+                                      e.vehicleType?.description ?? ''),
+                                  ViewUtils.buildTableCell(
+                                      e.brand?.description ?? ''),
+                                  ViewUtils.buildTableCell(
+                                      e.model?.description ?? ''),
+                                  ViewUtils.buildTableCell(
+                                      e.fuelType?.description ?? ''),
                                   ViewUtils.buildTableCell((e.status == true)
                                       ? 'Activo'
                                       : 'Inactivo'),

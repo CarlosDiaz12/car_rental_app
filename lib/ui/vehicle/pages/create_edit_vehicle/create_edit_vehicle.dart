@@ -36,7 +36,10 @@ class _CreateEditVehicleState extends State<CreateEditVehicle> {
   late List<Model> modelListFiltered = [];
   @override
   void initState() {
-    // modelListFiltered = widget.modelList;
+    if (widget.action == FORM_ACTION.UPDATE) {
+      filterModels(widget.data!.brandId!);
+    }
+
     super.initState();
   }
 

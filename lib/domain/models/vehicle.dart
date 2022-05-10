@@ -28,6 +28,7 @@ class Vehicle {
     this.engineNumber,
     this.plateNumber,
     this.vehicleTypeId,
+    this.vehicleType,
     this.brandId,
     this.brand,
     this.modelId,
@@ -44,6 +45,7 @@ class Vehicle {
     int? engineNumber,
     int? plateNumber,
     int? vehicleTypeId,
+    VehicleType? vehicleType,
     int? brandId,
     Brand? brand,
     int? modelId,
@@ -59,6 +61,7 @@ class Vehicle {
       engineNumber: engineNumber ?? this.engineNumber,
       plateNumber: plateNumber ?? this.plateNumber,
       vehicleTypeId: vehicleTypeId ?? this.vehicleTypeId,
+      vehicleType: vehicleType ?? this.vehicleType,
       brandId: brandId ?? this.brandId,
       brand: brand ?? this.brand,
       modelId: modelId ?? this.modelId,
@@ -86,9 +89,14 @@ class Vehicle {
     if (engineNumber != null) {
       result.addAll({'engineNumber': engineNumber});
     }
+
     if (plateNumber != null) {
       result.addAll({'plateNumber': plateNumber});
     }
+    if (vehicleType != null) {
+      result.addAll({'vehicleType': vehicleType});
+    }
+
     if (vehicleTypeId != null) {
       result.addAll({'vehicleTypeId': vehicleTypeId});
     }
@@ -123,6 +131,9 @@ class Vehicle {
       engineNumber: map['engineNumber']?.toInt(),
       plateNumber: map['plateNumber']?.toInt(),
       vehicleTypeId: map['vehicleTypeId']?.toInt(),
+      vehicleType: map['vehicleType'] != null
+          ? VehicleType.fromMap(map['vehicleType'])
+          : null,
       brandId: map['brandId']?.toInt(),
       brand: map['brand'] != null ? Brand.fromMap(map['brand']) : null,
       modelId: map['modelId']?.toInt(),
@@ -155,6 +166,7 @@ class Vehicle {
         other.engineNumber == engineNumber &&
         other.plateNumber == plateNumber &&
         other.vehicleTypeId == vehicleTypeId &&
+        other.vehicleType == vehicleType &&
         other.brandId == brandId &&
         other.brand == brand &&
         other.modelId == modelId &&
@@ -172,6 +184,7 @@ class Vehicle {
         engineNumber.hashCode ^
         plateNumber.hashCode ^
         vehicleTypeId.hashCode ^
+        vehicleType.hashCode ^
         brandId.hashCode ^
         brand.hashCode ^
         modelId.hashCode ^
