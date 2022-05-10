@@ -6,18 +6,20 @@ class ListVehicleTypeViewModel extends BaseViewModel {
   VehicleTypeRepository repository;
   List<VehicleType>? _vehicleTypeList;
   List<VehicleType>? get list => _vehicleTypeList;
+  List<String> columnNames = ['Id', 'Descripcion', 'Estado'];
   ListVehicleTypeViewModel({
     required this.repository,
   });
 
   Future<void> loadData() async {
-    setBusyForObject(list, true);
+    clearErrors();
+    setBusyForObject(_vehicleTypeList, true);
     var res = await repository.getAll();
     res.fold((ex) {
       setError(ex);
     }, (data) {
       _vehicleTypeList = data;
     });
-    setBusyForObject(list, false);
+    setBusyForObject(_vehicleTypeList, false);
   }
 }
