@@ -66,6 +66,19 @@ class ListVehicleTypePage extends StatelessWidget {
                                   ViewUtils.buildTableCell((e.status == true)
                                       ? 'Activo'
                                       : 'Inactivo'),
+                                  ViewUtils.buildActionTableCell(
+                                    child: Icon(fluent.FluentIcons.delete),
+                                    onTap: () async {
+                                      var delete =
+                                          await _showConfirmDialog(context);
+                                      if (delete) {
+                                        await _showLoading(context);
+                                        await viewModel.delete(e.id!);
+                                        AutoRouter.of(context).pop();
+                                        await viewModel.loadData();
+                                      }
+                                    },
+                                  )
                                 ],
                               ),
                             )
@@ -78,6 +91,12 @@ class ListVehicleTypePage extends StatelessWidget {
         );
       },
     );
+  }
+
+  Future<bool> _showConfirmDialog(BuildContext context) async {
+    var response = await fluent.showDialog(
+        context: context, builder: (ctx) => ViewUtils.confirmDialog(context));
+    return (response != null && response == true);
   }
 
   Future<void> manageCreateEdit(BuildContext context, FORM_ACTION action,

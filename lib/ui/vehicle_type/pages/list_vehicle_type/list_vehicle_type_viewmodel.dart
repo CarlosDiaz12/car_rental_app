@@ -6,7 +6,7 @@ class ListVehicleTypeViewModel extends BaseViewModel {
   VehicleTypeRepository repository;
   List<VehicleType>? _vehicleTypeList;
   List<VehicleType>? get list => _vehicleTypeList;
-  List<String> columnNames = ['Id', 'Descripcion', 'Estado'];
+  List<String> columnNames = ['Id', 'Descripcion', 'Estado', 'Acciones'];
   ListVehicleTypeViewModel({
     required this.repository,
   });
@@ -38,6 +38,18 @@ class ListVehicleTypeViewModel extends BaseViewModel {
   Future<bool> update(VehicleType data) async {
     clearErrors();
     var res = await repository.update(data);
+    var response = false;
+    res.fold((ex) {
+      setError(ex);
+    }, (data) {
+      response = data;
+    });
+    return response;
+  }
+
+  Future<bool> delete(int id) async {
+    clearErrors();
+    var res = await repository.delete(id);
     var response = false;
     res.fold((ex) {
       setError(ex);
