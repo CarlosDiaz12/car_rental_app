@@ -31,7 +31,7 @@ class ListVehicleTypePage extends StatelessWidget {
           child: ScaffoldPage(
             header: PageHeader(
               leading: Text(
-                'Vehicle Types',
+                'Tipos de Vehiculos',
                 style: FluentTheme.of(context).typography.title!,
               ),
             ),
@@ -72,7 +72,7 @@ class ListVehicleTypePage extends StatelessWidget {
                                       var delete =
                                           await _showConfirmDialog(context);
                                       if (delete) {
-                                        await _showLoading(context);
+                                        _showLoading(context);
                                         await viewModel.delete(e.id!);
                                         AutoRouter.of(context).pop();
                                         await viewModel.loadData();
@@ -120,9 +120,8 @@ class ListVehicleTypePage extends StatelessWidget {
       }
 
       AutoRouter.of(context).pop();
+      viewModel.loadData();
     }
-
-    viewModel.loadData();
   }
 
   Future<void> _showLoading(BuildContext context) async {

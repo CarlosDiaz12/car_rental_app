@@ -27,7 +27,7 @@ class NavigationPage extends StatelessWidget {
             items: [
               PaneItem(
                 icon: Icon(FluentIcons.car),
-                title: Text('Vehicle Types'),
+                title: Text('Tipos de Vehiculos'),
               )
             ],
           ),
