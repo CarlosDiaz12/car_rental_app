@@ -3,9 +3,7 @@ import 'package:car_rental_app/domain/models/vehicle.dart';
 import 'package:car_rental_app/domain/repository/vehicle_repository_abstract.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-
 import '../../core/error/exceptions.dart';
-import '../../domain/models/brand.dart';
 
 class VehicleRepository extends VehicleRepositoryAbstract {
   final Dio _client;
@@ -14,7 +12,7 @@ class VehicleRepository extends VehicleRepositoryAbstract {
   Future<Either<Exception, List<Vehicle>>> getAll() async {
     try {
       var request = await _client.get(
-        '/brand',
+        '/vehicle',
       );
       var response = GetAllVehicleResponse.fromMap(request.data);
       return Right(response.data!);
@@ -36,7 +34,7 @@ class VehicleRepository extends VehicleRepositoryAbstract {
     try {
       object.id = 0;
       var request = await _client.post(
-        '/brand',
+        '/vehicle',
         data: object.toMap(),
       );
       var response = request.data['data'];
@@ -58,7 +56,7 @@ class VehicleRepository extends VehicleRepositoryAbstract {
   Future<Either<Exception, bool>> delete(int id) async {
     try {
       var request = await _client.delete(
-        '/brand',
+        '/vehicle',
         queryParameters: {'id': id},
       );
       var response = request.data['data'];
@@ -80,7 +78,7 @@ class VehicleRepository extends VehicleRepositoryAbstract {
   Future<Either<Exception, bool>> update(Vehicle object) async {
     try {
       var request = await _client.put(
-        '/brand',
+        '/vehicle',
         data: object.toMap(),
       );
       var response = request.data['data'];

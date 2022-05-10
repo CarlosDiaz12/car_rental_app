@@ -4,13 +4,19 @@ import 'package:flutter/material.dart';
 class TableWidget extends StatelessWidget {
   final List<String> columnNames;
   final List<DataRow> rows;
-  const TableWidget({Key? key, required this.columnNames, required this.rows})
-      : super(key: key);
+  final double columnWidth;
+  const TableWidget({
+    Key? key,
+    required this.columnNames,
+    required this.rows,
+    this.columnWidth = 56.0,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Material(
       child: DataTable(
+        columnSpacing: columnWidth,
         columns: [
           ...columnNames.map(
             (e) => DataColumn(
