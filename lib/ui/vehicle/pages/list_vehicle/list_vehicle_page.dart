@@ -1,5 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:car_rental_app/domain/models/vehicle.dart';
+import 'package:car_rental_app/domain/repository/brand_repository_abstract.dart';
+import 'package:car_rental_app/domain/repository/fuel_type_repository_abstract.dart';
+import 'package:car_rental_app/domain/repository/model_repository_abstract.dart';
 import 'package:car_rental_app/domain/repository/vehicle_repository_abstract.dart';
 import 'package:car_rental_app/ui/vehicle/pages/list_vehicle/list_vehicle_viewmodel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -9,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../../../domain/enums/form_action_enum.dart';
+import '../../../../domain/repository/vehicle_type_respository_abstract.dart';
 import '../../../common/view_utils.dart';
 import '../../../common/widgets/table_widget.dart';
 import '../create_edit_vehicle/create_edit_vehicle.dart';
@@ -20,9 +24,16 @@ class ListVehiclePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<ListVehicleViewModel>.reactive(
       viewModelBuilder: () => ListVehicleViewModel(
-          repository: Provider.of<VehicleRepositoryAbstract>(context)),
+        brandRepository: Provider.of<BrandRepositoryAbstract>(context),
+        vehicleTypeRepository:
+            Provider.of<VehicleTypeRepositoryAbstract>(context),
+        modelRepository: Provider.of<ModelRepositoryAbstract>(context),
+        fuelTypeRepository: Provider.of<FuelTypeRepositoryAbstract>(context),
+        repository: Provider.of<VehicleRepositoryAbstract>(context),
+      ),
       onModelReady: (viewModel) async {
         await viewModel.loadData();
+        await viewModel.loadValuesData();
       },
       builder: (context, viewModel, _) {
         return Padding(
@@ -36,7 +47,7 @@ class ListVehiclePage extends StatelessWidget {
               ),
             ),
             content: SingleChildScrollView(
-              child: viewModel.busy(viewModel.list)
+              child: viewModel.isBusy
                   ? Center(child: ProgressRing())
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,6 +117,10 @@ class ListVehiclePage extends StatelessWidget {
       context: context,
       builder: (context) {
         return CreateEditVehicle(
+          vehicleTypes: viewModel.vehicleTypeList!,
+          brandList: viewModel.brandList!,
+          modelList: viewModel.modelList!,
+          fuelTypeList: viewModel.fuelTypeList!,
           action: action,
           data: data,
         );
