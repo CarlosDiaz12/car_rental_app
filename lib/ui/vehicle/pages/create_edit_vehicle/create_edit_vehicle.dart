@@ -33,6 +33,12 @@ class CreateEditVehicle extends StatefulWidget {
 class _CreateEditVehicleState extends State<CreateEditVehicle> {
   final formData = Vehicle(status: true);
   final formKey = GlobalKey<FormState>();
+  late List<Model> modelListFiltered = [];
+  @override
+  void initState() {
+    // modelListFiltered = widget.modelList;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,28 +84,30 @@ class _CreateEditVehicleState extends State<CreateEditVehicle> {
                     SizedBox(
                       width: 200,
                       child: Combobox<int>(
-                          placeholder: Text('Marca'),
-                          isExpanded: true,
-                          items: widget.brandList
-                              .map((e) => ComboboxItem<int>(
-                                    value: e.id,
-                                    child: Text('${e.description}'),
-                                  ))
-                              .toList(),
-                          value: widget.action == FORM_ACTION.CREATE
-                              ? formData.brandId
-                              : widget.data?.brandId,
-                          onChanged: (value) {
-                            setState(() {
-                              if (value != null) {
-                                if (widget.action == FORM_ACTION.CREATE) {
-                                  formData.brandId = value;
-                                } else {
-                                  widget.data?.brandId = value;
-                                }
+                        placeholder: Text('Marca'),
+                        isExpanded: true,
+                        items: widget.brandList
+                            .map((e) => ComboboxItem<int>(
+                                  value: e.id,
+                                  child: Text('${e.description}'),
+                                ))
+                            .toList(),
+                        value: widget.action == FORM_ACTION.CREATE
+                            ? formData.brandId
+                            : widget.data?.brandId,
+                        onChanged: (value) {
+                          setState(() {
+                            if (value != null) {
+                              if (widget.action == FORM_ACTION.CREATE) {
+                                formData.brandId = value;
+                              } else {
+                                widget.data?.brandId = value;
                               }
-                            });
-                          }),
+                              filterModels(value);
+                            }
+                          });
+                        },
+                      ),
                     ),
                     SizedBox(
                       width: 200,
@@ -220,7 +228,7 @@ class _CreateEditVehicleState extends State<CreateEditVehicle> {
                       child: Combobox<int>(
                           placeholder: Text('Modelo'),
                           isExpanded: true,
-                          items: widget.modelList
+                          items: modelListFiltered
                               .map((e) => ComboboxItem<int>(
                                     value: e.id,
                                     child: Text('${e.description}'),
@@ -310,5 +318,10 @@ class _CreateEditVehicleState extends State<CreateEditVehicle> {
         )
       ],
     );
+  }
+
+  void filterModels(int brandSelected) {
+    var list = widget.modelList.where((e) => e.brandId == brandSelected);
+    modelListFiltered = list.toList();
   }
 }
