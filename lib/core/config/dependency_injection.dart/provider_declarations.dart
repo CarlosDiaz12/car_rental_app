@@ -1,6 +1,8 @@
 import 'package:car_rental_app/data/repository/brand_repository.dart';
+import 'package:car_rental_app/data/repository/fuel_type_repository.dart';
 import 'package:car_rental_app/data/repository/model_repository.dart';
 import 'package:car_rental_app/domain/repository/brand_repository_abstract.dart';
+import 'package:car_rental_app/domain/repository/fuel_type_repository_abstract.dart';
 import 'package:car_rental_app/domain/repository/model_repository_abstract.dart';
 import 'package:car_rental_app/domain/repository/vehicle_type_respository_abstract.dart';
 import 'package:dio/dio.dart';
@@ -39,6 +41,11 @@ class DependencyInjection {
     ),
     ProxyProvider<Dio, ModelRepositoryAbstract>(
       update: (context, dioClient, _) => ModelRepository(
+        client: dioClient,
+      ),
+    ),
+    ProxyProvider<Dio, FuelTypeRepositoryAbstract>(
+      update: (context, dioClient, _) => FuelTypeRepository(
         client: dioClient,
       ),
     ),
