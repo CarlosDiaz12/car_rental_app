@@ -13,7 +13,7 @@ class ModelRepository extends ModelRepositoryAbstract {
   Future<Either<Exception, List<Model>>> getAll() async {
     try {
       var request = await _client.get(
-        '/brand',
+        '/model',
       );
       var response = GetAllModelResponse.fromMap(request.data);
       return Right(response.data!);
@@ -35,7 +35,7 @@ class ModelRepository extends ModelRepositoryAbstract {
     try {
       object.id = 0;
       var request = await _client.post(
-        '/brand',
+        '/model',
         data: object.toMap(),
       );
       var response = request.data['data'];
@@ -57,7 +57,7 @@ class ModelRepository extends ModelRepositoryAbstract {
   Future<Either<Exception, bool>> delete(int id) async {
     try {
       var request = await _client.delete(
-        '/brand',
+        '/model',
         queryParameters: {'id': id},
       );
       var response = request.data['data'];
@@ -79,7 +79,7 @@ class ModelRepository extends ModelRepositoryAbstract {
   Future<Either<Exception, bool>> update(Model object) async {
     try {
       var request = await _client.put(
-        '/brand',
+        '/model',
         data: object.toMap(),
       );
       var response = request.data['data'];
