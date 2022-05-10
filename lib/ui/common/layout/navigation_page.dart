@@ -33,7 +33,7 @@ class NavigationPage extends StatelessWidget {
                 title: Text('Tipos de Vehiculos'),
               ),
               PaneItem(
-                icon: Icon(FluentIcons.car),
+                icon: Icon(FluentIcons.verified_brand_solid),
                 title: Text('Marcas'),
               )
             ],

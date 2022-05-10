@@ -27,8 +27,9 @@ class ListVehicleTypePage extends StatelessWidget {
       },
       builder: (context, viewModel, _) {
         return Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: ScaffoldPage(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
             header: PageHeader(
               leading: Text(
                 'Tipos de Vehiculos',
