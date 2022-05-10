@@ -1,5 +1,4 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:car_rental_app/core/config/dependency_injection.dart/provider_declarations.dart';
 import 'package:provider/provider.dart';
@@ -17,34 +16,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: DependencyInjection.providers,
-      child: MaterialApp.router(
+      child: FluentApp.router(
+        debugShowCheckedModeBanner: false,
+        color: Colors.blue,
         routerDelegate: _appRouter.delegate(),
         routeInformationParser: _appRouter.defaultRouteParser(),
         title: 'Flutter Car Rental App',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-      ),
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Flutter Base'),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            AutoRouter.of(context).push(ListVehicleTypeRoute());
-          },
-          child: Text('Go to example'),
-        ),
+        theme: ThemeData(),
       ),
     );
   }
