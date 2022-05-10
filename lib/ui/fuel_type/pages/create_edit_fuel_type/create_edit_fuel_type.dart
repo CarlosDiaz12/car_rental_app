@@ -1,31 +1,27 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:car_rental_app/domain/models/brand.dart';
+import 'package:car_rental_app/domain/models/fuel_type.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 import '../../../../domain/enums/form_action_enum.dart';
 
-class CreateEditBrand extends StatefulWidget {
+class CreateEditFuelType extends StatefulWidget {
   final FORM_ACTION action;
-  final Brand? data;
-  CreateEditBrand({
-    Key? key,
-    required this.action,
-    this.data,
-  }) : super(key: key);
+  final FuelType? data;
+  CreateEditFuelType({Key? key, required this.action, this.data})
+      : super(key: key);
 
   @override
-  State<CreateEditBrand> createState() => _CreateEditBrandState();
+  State<CreateEditFuelType> createState() => _CreateEditFuelTypeState();
 }
 
-class _CreateEditBrandState extends State<CreateEditBrand> {
-  final Brand formData = Brand(status: true);
+class _CreateEditFuelTypeState extends State<CreateEditFuelType> {
+  final formData = FuelType(status: true);
   final formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     var title = widget.action == FORM_ACTION.CREATE ? 'Crear' : 'Editar';
     return ContentDialog(
-      title: Text('$title Marca',
+      title: Text('$title Tipo de Combustible',
           style: FluentTheme.of(context).typography.subtitle),
       content: Column(
         mainAxisSize: MainAxisSize.min,
