@@ -1,9 +1,6 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:car_rental_app/domain/models/vehicle_type.dart';
-import 'package:car_rental_app/domain/repository/vehicle_type_respository_abstract.dart';
-import 'package:car_rental_app/ui/common/view_utils.dart';
-import 'package:car_rental_app/ui/common/widgets/table_widget.dart';
-import 'package:car_rental_app/ui/vehicle_type/pages/list_vehicle_type/create_edit_vehicle_type/create_edit_vehicle_type.dart';
+import 'package:car_rental_app/domain/models/brand.dart';
+import 'package:car_rental_app/ui/brand/pages/list_brand/list_brand_viewmodel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/material.dart';
@@ -11,17 +8,19 @@ import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../../../domain/enums/form_action_enum.dart';
-import 'list_vehicle_type_viewmodel.dart';
+import '../../../../domain/repository/brand_repository_abstract.dart';
+import '../../../common/view_utils.dart';
+import '../../../common/widgets/table_widget.dart';
+import '../create_edit_brand/create_edit_brand.dart';
 
-class ListVehicleTypePage extends StatelessWidget {
-  const ListVehicleTypePage({Key? key}) : super(key: key);
+class ListBrandPage extends StatelessWidget {
+  const ListBrandPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<ListVehicleTypeViewModel>.reactive(
-      viewModelBuilder: () => ListVehicleTypeViewModel(
-        repository: Provider.of<VehicleTypeRepositoryAbstract>(context),
-      ),
+    return ViewModelBuilder<ListBrandViewModel>.reactive(
+      viewModelBuilder: () => ListBrandViewModel(
+          repository: Provider.of<BrandRepositoryAbstract>(context)),
       onModelReady: (viewModel) async {
         await viewModel.loadData();
       },
@@ -31,7 +30,7 @@ class ListVehicleTypePage extends StatelessWidget {
           child: ScaffoldPage(
             header: PageHeader(
               leading: Text(
-                'Tipos de Vehiculos',
+                'Marcas',
                 style: FluentTheme.of(context).typography.title!,
               ),
             ),
@@ -100,11 +99,11 @@ class ListVehicleTypePage extends StatelessWidget {
   }
 
   Future<void> manageCreateEdit(BuildContext context, FORM_ACTION action,
-      ListVehicleTypeViewModel viewModel, VehicleType? data) async {
-    var response = await fluent.showDialog<VehicleType?>(
+      ListBrandViewModel viewModel, Brand? data) async {
+    var response = await fluent.showDialog<Brand?>(
       context: context,
       builder: (context) {
-        return CreateEditVehicleType(
+        return CreateEditBrand(
           action: action,
           data: data,
         );
@@ -125,7 +124,7 @@ class ListVehicleTypePage extends StatelessWidget {
   }
 
   Future<void> _showLoading(BuildContext context) async {
-    await fluent.showDialog<VehicleType?>(
+    await fluent.showDialog<Brand?>(
       context: context,
       builder: (context) {
         return ContentDialog(

@@ -1,3 +1,6 @@
+import 'package:car_rental_app/data/repository/brand_repository.dart';
+import 'package:car_rental_app/domain/repository/brand_repository_abstract.dart';
+import 'package:car_rental_app/domain/repository/vehicle_type_respository_abstract.dart';
 import 'package:dio/dio.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
@@ -22,12 +25,16 @@ class DependencyInjection {
   ];
 
   static final List<SingleChildWidget> _repositoryProviders = [
-    ProxyProvider<Dio, VehicleTypeRepository>(
+    ProxyProvider<Dio, VehicleTypeRepositoryAbstract>(
       update: (context, dioClient, _) => VehicleTypeRepository(
         client: dioClient,
       ),
     ),
-
+    ProxyProvider<Dio, BrandRepositoryAbstract>(
+      update: (context, dioClient, _) => BrandRepository(
+        client: dioClient,
+      ),
+    ),
     /*Provider.value(value: ExampleRepository),*/
 
     /*

@@ -1,29 +1,30 @@
-import 'package:car_rental_app/domain/models/vehicle_type.dart';
-import 'package:car_rental_app/domain/repository/vehicle_type_respository_abstract.dart';
+import 'package:car_rental_app/domain/models/brand.dart';
 import 'package:stacked/stacked.dart';
 
-class ListVehicleTypeViewModel extends BaseViewModel {
-  VehicleTypeRepositoryAbstract repository;
-  List<VehicleType>? _vehicleTypeList;
-  List<VehicleType>? get list => _vehicleTypeList;
+import '../../../../domain/repository/brand_repository_abstract.dart';
+
+class ListBrandViewModel extends BaseViewModel {
+  BrandRepositoryAbstract repository;
+  List<Brand>? _list;
+  List<Brand>? get list => _list;
   List<String> columnNames = ['Id', 'Descripcion', 'Estado', 'Acciones'];
-  ListVehicleTypeViewModel({
+  ListBrandViewModel({
     required this.repository,
   });
 
   Future<void> loadData() async {
     clearErrors();
-    setBusyForObject(_vehicleTypeList, true);
+    setBusyForObject(_list, true);
     var res = await repository.getAll();
     res.fold((ex) {
       setError(ex);
     }, (data) {
-      _vehicleTypeList = data;
+      _list = data;
     });
-    setBusyForObject(_vehicleTypeList, false);
+    setBusyForObject(_list, false);
   }
 
-  Future<bool> create(VehicleType data) async {
+  Future<bool> create(Brand data) async {
     clearErrors();
     var res = await repository.create(data);
     var response = false;
@@ -35,7 +36,7 @@ class ListVehicleTypeViewModel extends BaseViewModel {
     return response;
   }
 
-  Future<bool> update(VehicleType data) async {
+  Future<bool> update(Brand data) async {
     clearErrors();
     var res = await repository.update(data);
     var response = false;
