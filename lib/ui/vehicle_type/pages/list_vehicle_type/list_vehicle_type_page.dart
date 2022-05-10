@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:car_rental_app/data/repository/vehicle_type_repository.dart';
-import 'package:car_rental_app/ui/vehicle_type/pages/example/list_vehicle_type_viewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
+
+import 'list_vehicle_type_viewmodel.dart';
 
 class ListVehicleTypePage extends StatelessWidget {
   const ListVehicleTypePage({Key? key}) : super(key: key);
