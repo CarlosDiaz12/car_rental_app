@@ -29,4 +29,39 @@ class VehicleTypeRepository extends VehicleTypeRepositoryAbstract {
       return Left(UnknownErrorException('Error inesperado: ${e.toString()}'));
     }
   }
+
+  @override
+  Future<Either<Exception, bool>> create(VehicleType object) async {
+    try {
+      object.id = 0;
+      var request = await _client.post(
+        '/vehicleType',
+        data: object.toMap(),
+      );
+      var response = request.data['data'];
+      return Right(response);
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 404) {
+        return Left(NotFoundException());
+      }
+      if (e.response?.statusCode == 401) {
+        return Left(NotAuthorizedException());
+      }
+      return Left(ServerException(null, e.response?.statusCode ?? 500));
+    } catch (e) {
+      return Left(UnknownErrorException('Error inesperado: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Exception, bool>> delete(int id) {
+    // TODO: implement delete
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Exception, bool>> update(VehicleType object) {
+    // TODO: implement update
+    throw UnimplementedError();
+  }
 }

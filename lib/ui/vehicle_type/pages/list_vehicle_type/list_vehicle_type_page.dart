@@ -1,11 +1,14 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:car_rental_app/domain/models/vehicle_type.dart';
 import 'package:car_rental_app/ui/common/view_utils.dart';
 import 'package:car_rental_app/ui/common/widgets/table_widget.dart';
+import 'package:car_rental_app/ui/vehicle_type/pages/list_vehicle_type/create_edit_vehicle_type/create_edit_vehicle_type.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:car_rental_app/data/repository/vehicle_type_repository.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../../../domain/enums/form_action_enum.dart';
 import 'list_vehicle_type_viewmodel.dart';
 
 class ListVehicleTypePage extends StatelessWidget {
@@ -32,12 +35,28 @@ class ListVehicleTypePage extends StatelessWidget {
             ),
             content: SingleChildScrollView(
               child: viewModel.busy(viewModel.list)
-                  ? Center(child: CircularProgressIndicator())
+                  ? Center(child: ProgressRing())
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Button(
-                          onPressed: () {},
+                          onPressed: () async {
+                            var response = await showDialog<VehicleType?>(
+                              context: context,
+                              builder: (context) {
+                                return CreateEditVehicleType(
+                                    action: FORM_ACTION.CREATE);
+                              },
+                            );
+
+                            if (response != null) {
+                              _showLoading(context);
+                              await viewModel.create(response);
+                              AutoRouter.of(context).pop();
+                            }
+
+                            viewModel.loadData();
+                          },
                           child: Text('Agregar'),
                         ),
                         SizedBox(height: 10),
@@ -49,7 +68,9 @@ class ListVehicleTypePage extends StatelessWidget {
                                 children: [
                                   ViewUtils.buildTableCell(e.id),
                                   ViewUtils.buildTableCell(e.description),
-                                  ViewUtils.buildTableCell(e.status),
+                                  ViewUtils.buildTableCell((e.status == true)
+                                      ? 'Activo'
+                                      : 'Inactivo'),
                                 ],
                               ),
                             )
@@ -58,6 +79,21 @@ class ListVehicleTypePage extends StatelessWidget {
                       ],
                     ),
             ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _showLoading(BuildContext context) async {
+    await showDialog<VehicleType?>(
+      context: context,
+      builder: (context) {
+        return ContentDialog(
+          constraints: BoxConstraints(maxHeight: 150, maxWidth: 200),
+          title: Text('Cargando'),
+          content: Center(
+            child: ProgressRing(),
           ),
         );
       },

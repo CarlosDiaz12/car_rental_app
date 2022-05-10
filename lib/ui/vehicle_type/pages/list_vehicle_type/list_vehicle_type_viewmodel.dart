@@ -22,4 +22,18 @@ class ListVehicleTypeViewModel extends BaseViewModel {
     });
     setBusyForObject(_vehicleTypeList, false);
   }
+
+  Future<bool> create(VehicleType data) async {
+    clearErrors();
+    //setBusyForObject(_vehicleTypeList, true);
+    var res = await repository.create(data);
+    var response = false;
+    res.fold((ex) {
+      setError(ex);
+    }, (data) {
+      response = data;
+    });
+    return response;
+    //setBusyForObject(_vehicleTypeList, false);
+  }
 }
