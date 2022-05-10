@@ -77,6 +77,10 @@ class VehicleRepository extends VehicleRepositoryAbstract {
   @override
   Future<Either<Exception, bool>> update(Vehicle object) async {
     try {
+      object.brand = null;
+      object.vehicleType = null;
+      object.model = null;
+      object.fuelType = null;
       var request = await _client.put(
         '/vehicle',
         data: object.toMap(),
