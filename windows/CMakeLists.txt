@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
-project(flutter_movies_app LANGUAGES CXX)
+project(car_rental_system LANGUAGES CXX)
 
-set(BINARY_NAME "flutter_movies_app")
+set(BINARY_NAME "car_rental_system")
 
 cmake_policy(SET CMP0063 NEW)
 
