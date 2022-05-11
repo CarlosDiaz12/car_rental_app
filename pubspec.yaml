@@ -44,7 +44,7 @@ dependencies:
   # ui
   fluent_ui: ^3.11.1
   mask_text_input_formatter: ^2.3.0
-
+  intl: ^0.17.0
   # ENV variables
   flutter_dotenv: ^5.0.2
 dev_dependencies:

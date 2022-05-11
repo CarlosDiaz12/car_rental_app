@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:car_rental_app/domain/enums/work_shift.dart';
+import 'package:car_rental_app/ui/common/view_utils.dart';
 
 class Employee {
   int? id;
@@ -56,7 +57,7 @@ class Employee {
       result.addAll({'idCard': idCard});
     }
     if (hireDate != null) {
-      result.addAll({'hireDate': hireDate!.millisecondsSinceEpoch});
+      result.addAll({'hireDate': ViewUtils.formatDate(hireDate!)});
     }
     if (comissionPercentage != null) {
       result.addAll({'comissionPercentage': comissionPercentage});
@@ -74,9 +75,8 @@ class Employee {
       status: map['status'],
       name: map['name'],
       idCard: map['idCard'],
-      hireDate: map['hireDate'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['hireDate'])
-          : null,
+      hireDate:
+          map['hireDate'] != null ? DateTime.parse(map['hireDate']) : null,
       comissionPercentage: map['comissionPercentage']?.toDouble(),
       workShift:
           map['workShift'] != null ? WorkShift.values[map['workShift']] : null,
