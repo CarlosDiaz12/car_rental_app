@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:car_rental_app/domain/enums/tax_payer_type.dart';
+import 'package:car_rental_app/domain/enums/work_shift.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -60,6 +61,19 @@ class ViewUtils {
     }
   }
 
+  static String getWorkShiftText(WorkShift type) {
+    switch (type) {
+      case WorkShift.DAY:
+        return 'Dia';
+      case WorkShift.AFTERNOON:
+        return 'Tarde';
+      case WorkShift.NIGHT:
+        return 'Nocturno';
+      default:
+        return 'Desconocido';
+    }
+  }
+
   static MaskTextInputFormatter getIdentificationNumberMask() =>
       MaskTextInputFormatter(
           mask: '###-#######-#', filter: {"#": RegExp(r'[0-9]')});
@@ -85,4 +99,7 @@ class ViewUtils {
 
     return dig == int.parse(str[10]);
   }
+
+  static String formatDate(DateTime date) =>
+      '${date.year}-${date.month < 10 ? '0' : ''}${date.month}-${date.day}';
 }

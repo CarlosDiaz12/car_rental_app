@@ -1,6 +1,7 @@
 import 'package:car_rental_app/ui/brand/pages/list_brand/list_brand_page.dart';
 import 'package:car_rental_app/ui/client/pages/list_client/list_client_page.dart';
 import 'package:car_rental_app/ui/common/layout/layout_page_viewmodel.dart';
+import 'package:car_rental_app/ui/employee/pages/list_employee/list_employee_page.dart';
 import 'package:car_rental_app/ui/fuel_type/pages/list_fuel_type/list_fuel_type_page.dart';
 import 'package:car_rental_app/ui/model/pages/list_model/list_model_page.dart';
 import 'package:car_rental_app/ui/vehicle/pages/list_vehicle/list_vehicle_page.dart';
@@ -66,6 +67,10 @@ class NavigationPage extends StatelessWidget {
               PaneItem(
                 icon: Icon(FluentIcons.people),
                 title: Text('Clientes'),
+              ),
+              PaneItem(
+                icon: Icon(FluentIcons.employee_self_service),
+                title: Text('Empleados'),
               )
             ],
           ),
@@ -77,7 +82,8 @@ class NavigationPage extends StatelessWidget {
               ListModelPage(),
               ListFuelTypePage(),
               ListVehiclePage(),
-              ListClientPage()
+              ListClientPage(),
+              ListEmployeePage()
             ],
           ),
         );
