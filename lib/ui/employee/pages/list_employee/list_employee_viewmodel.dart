@@ -12,8 +12,8 @@ class ListEmployeeViewModel extends BaseViewModel {
     'Cedula',
     'Turno Labor.',
     'Porc. Comision',
-    'Fecha Ingreso'
-        'Estado',
+    'Fecha Ingreso',
+    'Estado',
     'Acciones'
   ];
   ListEmployeeViewModel({
