@@ -1,0 +1,1 @@
+enum TaxPayerType { PHYSICAL, LEGAL }

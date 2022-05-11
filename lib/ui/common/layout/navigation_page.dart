@@ -1,4 +1,5 @@
 import 'package:car_rental_app/ui/brand/pages/list_brand/list_brand_page.dart';
+import 'package:car_rental_app/ui/client/pages/list_client/list_client_page.dart';
 import 'package:car_rental_app/ui/common/layout/layout_page_viewmodel.dart';
 import 'package:car_rental_app/ui/fuel_type/pages/list_fuel_type/list_fuel_type_page.dart';
 import 'package:car_rental_app/ui/model/pages/list_model/list_model_page.dart';
@@ -16,20 +17,31 @@ class NavigationPage extends StatelessWidget {
       viewModelBuilder: () => LayoutPageViewModel(),
       builder: (context, viewModel, _) {
         return NavigationView(
-          appBar: NavigationAppBar(automaticallyImplyLeading: false),
+          appBar: NavigationAppBar(
+            automaticallyImplyLeading: false,
+            title: Padding(
+              padding: EdgeInsets.only(left: 12),
+              child: DefaultTextStyle(
+                style: FluentTheme.of(context).typography.title!.copyWith(
+                      fontSize: 26,
+                    ),
+                child: Text('Car Rental System'),
+              ),
+            ),
+          ),
           pane: NavigationPane(
+            header: Padding(
+              padding: EdgeInsets.only(left: 12),
+              child: DefaultTextStyle(
+                style: FluentTheme.of(context).typography.subtitle!,
+                child: Text('Menu'),
+              ),
+            ),
             selected: viewModel.currentIndex,
             displayMode: PaneDisplayMode.auto,
             onChanged: (int index) {
               viewModel.changePageIndex(index);
             },
-            header: Padding(
-              padding: EdgeInsets.only(left: 12),
-              child: DefaultTextStyle(
-                style: FluentTheme.of(context).typography.title!,
-                child: Text('Car Rental App'),
-              ),
-            ),
             items: [
               PaneItem(
                 icon: Icon(FluentIcons.car),
@@ -50,6 +62,10 @@ class NavigationPage extends StatelessWidget {
               PaneItem(
                 icon: Icon(FluentIcons.car),
                 title: Text('Vehiculos'),
+              ),
+              PaneItem(
+                icon: Icon(FluentIcons.people),
+                title: Text('Clientes'),
               )
             ],
           ),
@@ -60,7 +76,8 @@ class NavigationPage extends StatelessWidget {
               ListBrandPage(),
               ListModelPage(),
               ListFuelTypePage(),
-              ListVehiclePage()
+              ListVehiclePage(),
+              ListClientPage()
             ],
           ),
         );
