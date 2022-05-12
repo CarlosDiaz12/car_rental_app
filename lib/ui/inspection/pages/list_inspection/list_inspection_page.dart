@@ -10,8 +10,6 @@ import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
-
-import '../../../../domain/dto/check_vehicle_availability_dto.dart';
 import '../../../../domain/enums/form_action_enum.dart';
 import '../../../common/view_utils.dart';
 import '../../../common/widgets/table_widget.dart';

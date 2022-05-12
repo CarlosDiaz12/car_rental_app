@@ -9,8 +9,6 @@ import 'package:car_rental_app/ui/common/view_utils.dart';
 import 'package:car_rental_app/ui/common/widgets/labeled_flied_widget.dart';
 import 'package:car_rental_app/ui/inspection/pages/list_inspection/list_inspection_viewmodel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:provider/provider.dart';
-
 import '../../../../domain/dto/check_vehicle_availability_dto.dart';
 import '../../../../domain/enums/form_action_enum.dart';
 
