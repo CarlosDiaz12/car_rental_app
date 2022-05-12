@@ -9,6 +9,8 @@ import 'package:car_rental_app/ui/vehicle_type/pages/list_vehicle_type/list_vehi
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../inspection/pages/list_inspection/list_inspection_page.dart';
+
 class NavigationPage extends StatelessWidget {
   const NavigationPage({Key? key}) : super(key: key);
 
@@ -22,12 +24,16 @@ class NavigationPage extends StatelessWidget {
             automaticallyImplyLeading: false,
             title: Padding(
               padding: EdgeInsets.only(left: 12),
-              child: DefaultTextStyle(
-                style: FluentTheme.of(context).typography.title!.copyWith(
-                      fontSize: 26,
-                    ),
-                child: Text('Car Rental System'),
-              ),
+              child: Row(children: [
+                Icon(FluentIcons.car, size: 24),
+                SizedBox(width: 10),
+                Text(
+                  'Car Rental System',
+                  style: FluentTheme.of(context).typography.title!.copyWith(
+                        fontSize: 24,
+                      ),
+                ),
+              ]),
             ),
           ),
           pane: NavigationPane(
@@ -44,6 +50,14 @@ class NavigationPage extends StatelessWidget {
               viewModel.changePageIndex(index);
             },
             items: [
+              PaneItem(
+                icon: Icon(FluentIcons.test_add),
+                title: Text('Inspecciones'),
+              ),
+              PaneItemSeparator(),
+              PaneItemHeader(
+                header: Text('Mantenimientos'),
+              ),
               PaneItem(
                 icon: Icon(FluentIcons.car),
                 title: Text('Tipos de Vehiculos'),
@@ -71,19 +85,20 @@ class NavigationPage extends StatelessWidget {
               PaneItem(
                 icon: Icon(FluentIcons.employee_self_service),
                 title: Text('Empleados'),
-              )
+              ),
             ],
           ),
           content: NavigationBody(
             index: viewModel.currentIndex,
             children: [
+              ListInspectionPage(),
               ListVehicleTypePage(),
               ListBrandPage(),
               ListModelPage(),
               ListFuelTypePage(),
               ListVehiclePage(),
               ListClientPage(),
-              ListEmployeePage()
+              ListEmployeePage(),
             ],
           ),
         );
