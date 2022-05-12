@@ -77,6 +77,9 @@ class InspectionRepository extends InspectionRepositoryAbstract {
   @override
   Future<Either<Exception, bool>> update(Inspection object) async {
     try {
+      object.client = null;
+      object.employee = null;
+      object.vehicle = null;
       var request = await _client.put(
         '/inspection',
         data: object.toMap(),
