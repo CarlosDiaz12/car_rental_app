@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:car_rental_app/domain/enums/fuel_quantity.dart';
+import 'package:car_rental_app/domain/enums/inspection_type.dart';
 import 'package:car_rental_app/domain/enums/tax_payer_type.dart';
 import 'package:car_rental_app/domain/enums/work_shift.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -70,6 +71,17 @@ class ViewUtils {
         return 'Tarde';
       case WorkShift.NIGHT:
         return 'Nocturno';
+      default:
+        return 'Desconocido';
+    }
+  }
+
+  static String getInspectionTypeText(InspectionType type) {
+    switch (type) {
+      case InspectionType.IN:
+        return 'Entrada';
+      case InspectionType.OUT:
+        return 'Salida';
       default:
         return 'Desconocido';
     }

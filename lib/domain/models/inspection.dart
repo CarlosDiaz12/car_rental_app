@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:car_rental_app/domain/enums/inspection_type.dart';
 import 'package:car_rental_app/ui/common/view_utils.dart';
 
 import '../enums/fuel_quantity.dart';
@@ -26,6 +27,7 @@ class Inspection {
   DateTime? inspectionDate;
   int? employeeId;
   Employee? employee;
+  InspectionType? inspectionType;
   Inspection({
     this.id,
     this.status,
@@ -45,48 +47,49 @@ class Inspection {
     this.inspectionDate,
     this.employeeId,
     this.employee,
+    this.inspectionType,
   });
 
-  Inspection copyWith({
-    int? id,
-    bool? status,
-    int? vehicleId,
-    Vehicle? vehicle,
-    int? clientId,
-    Client? client,
-    bool? hasScratches,
-    FuelQuantity? fuelQuantity,
-    bool? hasSpareTire,
-    bool? hasManualJack,
-    bool? hasGlassBreakage,
-    bool? firstTireCondition,
-    bool? secondTireCondition,
-    bool? thirdTireCondition,
-    bool? fourthTireCondition,
-    DateTime? inspectionDate,
-    int? employeeId,
-    Employee? employee,
-  }) {
+  Inspection copyWith(
+      {int? id,
+      bool? status,
+      int? vehicleId,
+      Vehicle? vehicle,
+      int? clientId,
+      Client? client,
+      bool? hasScratches,
+      FuelQuantity? fuelQuantity,
+      bool? hasSpareTire,
+      bool? hasManualJack,
+      bool? hasGlassBreakage,
+      bool? firstTireCondition,
+      bool? secondTireCondition,
+      bool? thirdTireCondition,
+      bool? fourthTireCondition,
+      DateTime? inspectionDate,
+      int? employeeId,
+      Employee? employee,
+      InspectionType? inspectionType}) {
     return Inspection(
-      id: id ?? this.id,
-      status: status ?? this.status,
-      vehicleId: vehicleId ?? this.vehicleId,
-      vehicle: vehicle ?? this.vehicle,
-      clientId: clientId ?? this.clientId,
-      client: client ?? this.client,
-      hasScratches: hasScratches ?? this.hasScratches,
-      fuelQuantity: fuelQuantity ?? this.fuelQuantity,
-      hasSpareTire: hasSpareTire ?? this.hasSpareTire,
-      hasManualJack: hasManualJack ?? this.hasManualJack,
-      hasGlassBreakage: hasGlassBreakage ?? this.hasGlassBreakage,
-      firstTireCondition: firstTireCondition ?? this.firstTireCondition,
-      secondTireCondition: secondTireCondition ?? this.secondTireCondition,
-      thirdTireCondition: thirdTireCondition ?? this.thirdTireCondition,
-      fourthTireCondition: fourthTireCondition ?? this.fourthTireCondition,
-      inspectionDate: inspectionDate ?? this.inspectionDate,
-      employeeId: employeeId ?? this.employeeId,
-      employee: employee ?? this.employee,
-    );
+        id: id ?? this.id,
+        status: status ?? this.status,
+        vehicleId: vehicleId ?? this.vehicleId,
+        vehicle: vehicle ?? this.vehicle,
+        clientId: clientId ?? this.clientId,
+        client: client ?? this.client,
+        hasScratches: hasScratches ?? this.hasScratches,
+        fuelQuantity: fuelQuantity ?? this.fuelQuantity,
+        hasSpareTire: hasSpareTire ?? this.hasSpareTire,
+        hasManualJack: hasManualJack ?? this.hasManualJack,
+        hasGlassBreakage: hasGlassBreakage ?? this.hasGlassBreakage,
+        firstTireCondition: firstTireCondition ?? this.firstTireCondition,
+        secondTireCondition: secondTireCondition ?? this.secondTireCondition,
+        thirdTireCondition: thirdTireCondition ?? this.thirdTireCondition,
+        fourthTireCondition: fourthTireCondition ?? this.fourthTireCondition,
+        inspectionDate: inspectionDate ?? this.inspectionDate,
+        employeeId: employeeId ?? this.employeeId,
+        employee: employee ?? this.employee,
+        inspectionType: inspectionType ?? this.inspectionType);
   }
 
   Map<String, dynamic> toMap() {
@@ -147,35 +150,42 @@ class Inspection {
       result.addAll({'employee': employee!.toMap()});
     }
 
+    if (inspectionType != null) {
+      result.addAll({'inspectionType': inspectionType!.index});
+    }
+
     return result;
   }
 
   factory Inspection.fromMap(Map<String, dynamic> map) {
     return Inspection(
-      id: map['id']?.toInt(),
-      status: map['status'],
-      vehicleId: map['vehicleId']?.toInt(),
-      vehicle: map['vehicle'] != null ? Vehicle.fromMap(map['vehicle']) : null,
-      clientId: map['clientId']?.toInt(),
-      client: map['client'] != null ? Client.fromMap(map['client']) : null,
-      hasScratches: map['hasScratches'],
-      fuelQuantity: map['fuelQuantity'] != null
-          ? FuelQuantity.values[map['fuelQuantity']]
-          : null,
-      hasSpareTire: map['hasSpareTire'],
-      hasManualJack: map['hasManualJack'],
-      hasGlassBreakage: map['hasGlassBreakage'],
-      firstTireCondition: map['firstTireCondition'],
-      secondTireCondition: map['secondTireCondition'],
-      thirdTireCondition: map['thirdTireCondition'],
-      fourthTireCondition: map['fourthTireCondition'],
-      inspectionDate: map['inspectionDate'] != null
-          ? DateTime.parse(map['inspectionDate'])
-          : null,
-      employeeId: map['employeeId']?.toInt(),
-      employee:
-          map['employee'] != null ? Employee.fromMap(map['employee']) : null,
-    );
+        id: map['id']?.toInt(),
+        status: map['status'],
+        vehicleId: map['vehicleId']?.toInt(),
+        vehicle:
+            map['vehicle'] != null ? Vehicle.fromMap(map['vehicle']) : null,
+        clientId: map['clientId']?.toInt(),
+        client: map['client'] != null ? Client.fromMap(map['client']) : null,
+        hasScratches: map['hasScratches'],
+        fuelQuantity: map['fuelQuantity'] != null
+            ? FuelQuantity.values[map['fuelQuantity']]
+            : null,
+        hasSpareTire: map['hasSpareTire'],
+        hasManualJack: map['hasManualJack'],
+        hasGlassBreakage: map['hasGlassBreakage'],
+        firstTireCondition: map['firstTireCondition'],
+        secondTireCondition: map['secondTireCondition'],
+        thirdTireCondition: map['thirdTireCondition'],
+        fourthTireCondition: map['fourthTireCondition'],
+        inspectionDate: map['inspectionDate'] != null
+            ? DateTime.parse(map['inspectionDate'])
+            : null,
+        employeeId: map['employeeId']?.toInt(),
+        employee:
+            map['employee'] != null ? Employee.fromMap(map['employee']) : null,
+        inspectionType: map['inspectionType'] != null
+            ? InspectionType.values[map['inspectionType']]
+            : null);
   }
 
   String toJson() => json.encode(toMap());

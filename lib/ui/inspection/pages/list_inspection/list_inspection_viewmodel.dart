@@ -1,3 +1,4 @@
+import 'package:car_rental_app/domain/dto/check_vehicle_availability_dto.dart';
 import 'package:car_rental_app/domain/models/client.dart';
 import 'package:car_rental_app/domain/models/employee.dart';
 import 'package:car_rental_app/domain/models/inspection.dart';
@@ -86,6 +87,18 @@ class ListInspectionViewModel extends BaseViewModel {
       _list = data;
     });
     setBusy(false);
+  }
+
+  Future<bool> checkAvailability(CheckVehicleAvailabilityDto data) async {
+    clearErrors();
+    var res = await repository.checkVehicleAvailability(data);
+    var response = false;
+    res.fold((ex) {
+      setError(ex);
+    }, (data) {
+      response = data;
+    });
+    return response;
   }
 
   Future<bool> create(Inspection data) async {

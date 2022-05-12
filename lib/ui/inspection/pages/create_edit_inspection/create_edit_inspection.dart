@@ -1,13 +1,17 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:car_rental_app/domain/enums/fuel_quantity.dart';
+import 'package:car_rental_app/domain/enums/inspection_type.dart';
 import 'package:car_rental_app/domain/models/client.dart';
 import 'package:car_rental_app/domain/models/employee.dart';
 import 'package:car_rental_app/domain/models/inspection.dart';
 import 'package:car_rental_app/domain/models/vehicle.dart';
 import 'package:car_rental_app/ui/common/view_utils.dart';
 import 'package:car_rental_app/ui/common/widgets/labeled_flied_widget.dart';
+import 'package:car_rental_app/ui/inspection/pages/list_inspection/list_inspection_viewmodel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:provider/provider.dart';
 
+import '../../../../domain/dto/check_vehicle_availability_dto.dart';
 import '../../../../domain/enums/form_action_enum.dart';
 
 class CreateEditInspection extends StatefulWidget {
@@ -16,6 +20,7 @@ class CreateEditInspection extends StatefulWidget {
   final List<Vehicle> vehicleList;
   final List<Client> clientList;
   final List<Employee> employeeList;
+  final ListInspectionViewModel viewModel;
   CreateEditInspection({
     Key? key,
     this.data,
@@ -23,6 +28,7 @@ class CreateEditInspection extends StatefulWidget {
     required this.vehicleList,
     required this.clientList,
     required this.employeeList,
+    required this.viewModel,
   }) : super(key: key);
 
   @override
@@ -359,26 +365,66 @@ class _CreateEditInspectionState extends State<CreateEditInspection> {
                   ],
                 ),
                 SizedBox(height: 20),
-                SizedBox(
-                  width: 200,
-                  child: DatePicker(
-                    headerStyle: labelStyle,
-                    header: 'Fecha Inspeccion',
-                    selected: widget.action == FORM_ACTION.CREATE
-                        ? formData.inspectionDate!
-                        : widget.data!.inspectionDate!,
-                    onChanged: (value) => {
-                      setState(
-                        () {
-                          if (widget.action == FORM_ACTION.CREATE) {
-                            formData.inspectionDate = value;
-                          } else {
-                            widget.data?.inspectionDate = value;
-                          }
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: 200,
+                      child: LabeledFieldWidget(
+                        label: 'Tipo Inspeccion',
+                        child: Combobox<int>(
+                          placeholder: Text('Selecciona'),
+                          isExpanded: true,
+                          items: InspectionType.values
+                              .map((e) => ComboboxItem<int>(
+                                    value: e.index,
+                                    child: Text(
+                                        ViewUtils.getInspectionTypeText(e)),
+                                  ))
+                              .toList(),
+                          value: widget.action == FORM_ACTION.CREATE
+                              ? formData.inspectionType?.index
+                              : widget.data?.inspectionType?.index,
+                          onChanged: (value) {
+                            setState(() {
+                              if (value != null) {
+                                if (widget.action == FORM_ACTION.CREATE) {
+                                  formData.inspectionType =
+                                      InspectionType.values[value];
+                                } else {
+                                  widget.data?.inspectionType =
+                                      InspectionType.values[value];
+                                }
+                              }
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 15),
+                    SizedBox(
+                      width: 200,
+                      child: DatePicker(
+                        headerStyle: labelStyle,
+                        header: 'Fecha Inspeccion',
+                        selected: widget.action == FORM_ACTION.CREATE
+                            ? formData.inspectionDate!
+                            : widget.data!.inspectionDate!,
+                        onChanged: (value) => {
+                          setState(
+                            () {
+                              if (widget.action == FORM_ACTION.CREATE) {
+                                formData.inspectionDate = value;
+                              } else {
+                                widget.data?.inspectionDate = value;
+                              }
+                            },
+                          )
                         },
-                      )
-                    },
-                  ),
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(height: 20),
                 Checkbox(
@@ -406,16 +452,29 @@ class _CreateEditInspectionState extends State<CreateEditInspection> {
       ),
       actions: [
         Button(
-          onPressed: () {
+          onPressed: () async {
             var resultData =
-                widget.action == FORM_ACTION.CREATE ? formData : widget.data;
-            if (resultData?.clientId != null &&
-                resultData?.employeeId != null &&
-                resultData?.vehicleId != null &&
-                resultData?.fuelQuantity != null) {
+                (widget.action == FORM_ACTION.CREATE ? formData : widget.data)!;
+            var inspected = await widget.viewModel
+                .checkAvailability(CheckVehicleAvailabilityDto(
+              clientId: resultData.clientId!,
+              vehicleId: resultData.vehicleId!,
+              inspectionDate: resultData.inspectionDate!,
+              type: resultData.inspectionType!,
+            ));
+
+            if (resultData.clientId != null &&
+                resultData.employeeId != null &&
+                resultData.vehicleId != null &&
+                resultData.fuelQuantity != null &&
+                resultData.inspectionType != null &&
+                !inspected) {
               AutoRouter.of(context).pop(resultData);
             } else {
-              _showValidationMessage(context);
+              var message = inspected
+                  ? 'Actualmente existe una inspeccion de tipo: ${ViewUtils.getInspectionTypeText(resultData.inspectionType!)} para este vehiculo, cliente y fecha.'
+                  : 'Complete los campos requeridos.';
+              _showValidationMessage(context, message);
             }
           },
           child: Text('Aceptar'),
@@ -430,13 +489,13 @@ class _CreateEditInspectionState extends State<CreateEditInspection> {
     );
   }
 
-  void _showValidationMessage(BuildContext context) {
+  void _showValidationMessage(BuildContext context, String message) {
     showDialog(
       context: context,
       builder: (context) {
         return ContentDialog(
-          title: Text('Campos requeridos'),
-          content: Text('Compelete los campos requeridos.'),
+          title: Text('Informacion'),
+          content: Text(message),
           actions: [
             Button(
                 child: Text('Ok'),

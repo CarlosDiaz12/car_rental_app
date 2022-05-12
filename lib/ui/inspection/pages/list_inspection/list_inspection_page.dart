@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../../../domain/dto/check_vehicle_availability_dto.dart';
 import '../../../../domain/enums/form_action_enum.dart';
 import '../../../common/view_utils.dart';
 import '../../../common/widgets/table_widget.dart';
@@ -130,6 +131,7 @@ class ListInspectionPage extends StatelessWidget {
       context: context,
       builder: (context) {
         return CreateEditInspection(
+          viewModel: viewModel,
           employeeList: viewModel.employeeList!,
           clientList: viewModel.clientList!,
           vehicleList: viewModel.vehicleList!,
