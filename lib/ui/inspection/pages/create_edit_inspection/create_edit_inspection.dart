@@ -5,6 +5,7 @@ import 'package:car_rental_app/domain/models/employee.dart';
 import 'package:car_rental_app/domain/models/inspection.dart';
 import 'package:car_rental_app/domain/models/vehicle.dart';
 import 'package:car_rental_app/ui/common/view_utils.dart';
+import 'package:car_rental_app/ui/common/widgets/labeled_flied_widget.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 import '../../../../domain/enums/form_action_enum.dart';
@@ -61,113 +62,126 @@ class _CreateEditInspectionState extends State<CreateEditInspection> {
                   children: [
                     SizedBox(
                       width: 200,
-                      child: Combobox<int>(
-                        placeholder: Text('Vehiculo'),
-                        isExpanded: true,
-                        items: widget.vehicleList
-                            .map((e) => ComboboxItem<int>(
-                                  value: e.id,
-                                  child: Text(
-                                      '${e.brand?.description} ${e.model?.description}'),
-                                ))
-                            .toList(),
-                        value: widget.action == FORM_ACTION.CREATE
-                            ? formData.vehicleId
-                            : widget.data?.vehicleId,
-                        onChanged: (value) {
-                          setState(() {
-                            if (value != null) {
-                              if (widget.action == FORM_ACTION.CREATE) {
-                                formData.vehicleId = value;
-                              } else {
-                                widget.data?.vehicleId = value;
+                      child: LabeledFieldWidget(
+                        label: 'Vehiculo',
+                        child: Combobox<int>(
+                          placeholder: Text('Selecciona'),
+                          isExpanded: true,
+                          items: widget.vehicleList
+                              .map((e) => ComboboxItem<int>(
+                                    value: e.id,
+                                    child: Text(
+                                        '${e.brand?.description} ${e.model?.description}'),
+                                  ))
+                              .toList(),
+                          value: widget.action == FORM_ACTION.CREATE
+                              ? formData.vehicleId
+                              : widget.data?.vehicleId,
+                          onChanged: (value) {
+                            setState(() {
+                              if (value != null) {
+                                if (widget.action == FORM_ACTION.CREATE) {
+                                  formData.vehicleId = value;
+                                } else {
+                                  widget.data?.vehicleId = value;
+                                }
                               }
-                            }
-                          });
-                        },
+                            });
+                          },
+                        ),
                       ),
                     ),
                     SizedBox(
                       width: 200,
-                      child: Combobox<int>(
-                        placeholder: Text('Cliente'),
-                        isExpanded: true,
-                        items: widget.clientList
-                            .map((e) => ComboboxItem<int>(
-                                  value: e.id,
-                                  child: Text('${e.name}'),
-                                ))
-                            .toList(),
-                        value: widget.action == FORM_ACTION.CREATE
-                            ? formData.clientId
-                            : widget.data?.clientId,
-                        onChanged: (value) {
-                          setState(() {
-                            if (value != null) {
-                              if (widget.action == FORM_ACTION.CREATE) {
-                                formData.clientId = value;
-                              } else {
-                                widget.data?.clientId = value;
+                      child: LabeledFieldWidget(
+                        label: 'Cliente',
+                        child: Combobox<int>(
+                          placeholder: Text('Selecciona'),
+                          isExpanded: true,
+                          items: widget.clientList
+                              .map((e) => ComboboxItem<int>(
+                                    value: e.id,
+                                    child: Text('${e.name}'),
+                                  ))
+                              .toList(),
+                          value: widget.action == FORM_ACTION.CREATE
+                              ? formData.clientId
+                              : widget.data?.clientId,
+                          onChanged: (value) {
+                            setState(() {
+                              if (value != null) {
+                                if (widget.action == FORM_ACTION.CREATE) {
+                                  formData.clientId = value;
+                                } else {
+                                  widget.data?.clientId = value;
+                                }
                               }
-                            }
-                          });
-                        },
+                            });
+                          },
+                        ),
                       ),
                     ),
                     SizedBox(
                       width: 200,
-                      child: Combobox<int>(
-                        placeholder: Text('Empleado'),
-                        isExpanded: true,
-                        items: widget.employeeList
-                            .map((e) => ComboboxItem<int>(
-                                  value: e.id,
-                                  child: Text('${e.name}'),
-                                ))
-                            .toList(),
-                        value: widget.action == FORM_ACTION.CREATE
-                            ? formData.employeeId
-                            : widget.data?.employeeId,
-                        onChanged: (value) {
-                          setState(() {
-                            if (value != null) {
-                              if (widget.action == FORM_ACTION.CREATE) {
-                                formData.employeeId = value;
-                              } else {
-                                widget.data?.employeeId = value;
+                      child: LabeledFieldWidget(
+                        label: 'Empleado',
+                        child: Combobox<int>(
+                          placeholder: Text('Selecciona'),
+                          isExpanded: true,
+                          items: widget.employeeList
+                              .map((e) => ComboboxItem<int>(
+                                    value: e.id,
+                                    child: Text('${e.name}'),
+                                  ))
+                              .toList(),
+                          value: widget.action == FORM_ACTION.CREATE
+                              ? formData.employeeId
+                              : widget.data?.employeeId,
+                          onChanged: (value) {
+                            setState(() {
+                              if (value != null) {
+                                if (widget.action == FORM_ACTION.CREATE) {
+                                  formData.employeeId = value;
+                                } else {
+                                  widget.data?.employeeId = value;
+                                }
                               }
-                            }
-                          });
-                        },
+                            });
+                          },
+                        ),
                       ),
                     ),
                     SizedBox(
                       width: 200,
-                      child: Combobox<int>(
-                        placeholder: Text('Cant. Comb.'),
-                        isExpanded: true,
-                        items: FuelQuantity.values
-                            .map((e) => ComboboxItem<int>(
-                                  value: e.index,
-                                  child: Text(ViewUtils.getFuelQuantityText(e)),
-                                ))
-                            .toList(),
-                        value: widget.action == FORM_ACTION.CREATE
-                            ? formData.fuelQuantity?.index
-                            : widget.data?.fuelQuantity?.index,
-                        onChanged: (value) {
-                          setState(() {
-                            if (value != null) {
-                              if (widget.action == FORM_ACTION.CREATE) {
-                                formData.fuelQuantity =
-                                    FuelQuantity.values[value];
-                              } else {
-                                widget.data?.fuelQuantity =
-                                    FuelQuantity.values[value];
+                      child: LabeledFieldWidget(
+                        label: 'C. Combustible',
+                        child: Combobox<int>(
+                          placeholder: Text('Selecciona'),
+                          isExpanded: true,
+                          items: FuelQuantity.values
+                              .map((e) => ComboboxItem<int>(
+                                    value: e.index,
+                                    child:
+                                        Text(ViewUtils.getFuelQuantityText(e)),
+                                  ))
+                              .toList(),
+                          value: widget.action == FORM_ACTION.CREATE
+                              ? formData.fuelQuantity?.index
+                              : widget.data?.fuelQuantity?.index,
+                          onChanged: (value) {
+                            setState(() {
+                              if (value != null) {
+                                if (widget.action == FORM_ACTION.CREATE) {
+                                  formData.fuelQuantity =
+                                      FuelQuantity.values[value];
+                                } else {
+                                  widget.data?.fuelQuantity =
+                                      FuelQuantity.values[value];
+                                }
                               }
-                            }
-                          });
-                        },
+                            });
+                          },
+                        ),
                       ),
                     ),
                   ],
@@ -178,7 +192,13 @@ class _CreateEditInspectionState extends State<CreateEditInspection> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Checkbox(
-                      content: Text('Ralladuras'),
+                      content: Text(
+                        'Ralladuras',
+                        style:
+                            FluentTheme.of(context).typography.body?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                      ),
                       checked: widget.action == FORM_ACTION.CREATE
                           ? formData.hasScratches
                           : widget.data?.hasScratches,
@@ -193,7 +213,13 @@ class _CreateEditInspectionState extends State<CreateEditInspection> {
                       },
                     ),
                     Checkbox(
-                      content: Text('Tiene Repuesta'),
+                      content: Text(
+                        'Tiene Repuesta',
+                        style:
+                            FluentTheme.of(context).typography.body?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                      ),
                       checked: widget.action == FORM_ACTION.CREATE
                           ? formData.hasSpareTire
                           : widget.data?.hasSpareTire,
@@ -208,7 +234,13 @@ class _CreateEditInspectionState extends State<CreateEditInspection> {
                       },
                     ),
                     Checkbox(
-                      content: Text('Tiene Gato'),
+                      content: Text(
+                        'Tiene Gato',
+                        style:
+                            FluentTheme.of(context).typography.body?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                      ),
                       checked: widget.action == FORM_ACTION.CREATE
                           ? formData.hasManualJack
                           : widget.data?.hasManualJack,
@@ -223,7 +255,13 @@ class _CreateEditInspectionState extends State<CreateEditInspection> {
                       },
                     ),
                     Checkbox(
-                      content: Text('Rotura Cristal'),
+                      content: Text(
+                        'Rotura Cristal',
+                        style:
+                            FluentTheme.of(context).typography.body?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                      ),
                       checked: widget.action == FORM_ACTION.CREATE
                           ? formData.hasGlassBreakage
                           : widget.data?.hasGlassBreakage,
@@ -244,6 +282,10 @@ class _CreateEditInspectionState extends State<CreateEditInspection> {
                 SizedBox(
                   width: 200,
                   child: DatePicker(
+                    headerStyle:
+                        FluentTheme.of(context).typography.body?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
                     header: 'Fecha Inspeccion',
                     selected: widget.action == FORM_ACTION.CREATE
                         ? formData.inspectionDate!
@@ -263,7 +305,12 @@ class _CreateEditInspectionState extends State<CreateEditInspection> {
                 ),
                 SizedBox(height: 20),
                 Checkbox(
-                  content: Text('Estado'),
+                  content: Text(
+                    'Estado',
+                    style: FluentTheme.of(context).typography.body?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
                   checked: widget.action == FORM_ACTION.CREATE
                       ? formData.status
                       : widget.data?.status,
