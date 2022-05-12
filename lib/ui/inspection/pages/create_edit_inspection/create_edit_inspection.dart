@@ -37,14 +37,22 @@ class _CreateEditInspectionState extends State<CreateEditInspection> {
     hasManualJack: false,
     hasGlassBreakage: false,
     hasScratches: false,
+    firstTireCondition: false,
+    secondTireCondition: false,
+    thirdTireCondition: false,
+    fourthTireCondition: false,
   );
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     var title = widget.action == FORM_ACTION.CREATE ? 'Crear' : 'Editar';
+    var labelStyle = FluentTheme.of(context).typography.body?.copyWith(
+          fontWeight: FontWeight.bold,
+        );
+
     return ContentDialog(
       constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.50,
+        maxHeight: MediaQuery.of(context).size.height * 0.70,
         maxWidth: MediaQuery.of(context).size.width * 0.62,
       ),
       title: Text('$title Inspeccion',
@@ -194,10 +202,7 @@ class _CreateEditInspectionState extends State<CreateEditInspection> {
                     Checkbox(
                       content: Text(
                         'Ralladuras',
-                        style:
-                            FluentTheme.of(context).typography.body?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                        style: labelStyle,
                       ),
                       checked: widget.action == FORM_ACTION.CREATE
                           ? formData.hasScratches
@@ -215,10 +220,7 @@ class _CreateEditInspectionState extends State<CreateEditInspection> {
                     Checkbox(
                       content: Text(
                         'Tiene Repuesta',
-                        style:
-                            FluentTheme.of(context).typography.body?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                        style: labelStyle,
                       ),
                       checked: widget.action == FORM_ACTION.CREATE
                           ? formData.hasSpareTire
@@ -236,10 +238,7 @@ class _CreateEditInspectionState extends State<CreateEditInspection> {
                     Checkbox(
                       content: Text(
                         'Tiene Gato',
-                        style:
-                            FluentTheme.of(context).typography.body?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                        style: labelStyle,
                       ),
                       checked: widget.action == FORM_ACTION.CREATE
                           ? formData.hasManualJack
@@ -257,10 +256,7 @@ class _CreateEditInspectionState extends State<CreateEditInspection> {
                     Checkbox(
                       content: Text(
                         'Rotura Cristal',
-                        style:
-                            FluentTheme.of(context).typography.body?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                        style: labelStyle,
                       ),
                       checked: widget.action == FORM_ACTION.CREATE
                           ? formData.hasGlassBreakage
@@ -279,13 +275,94 @@ class _CreateEditInspectionState extends State<CreateEditInspection> {
                   ],
                 ),
                 SizedBox(height: 20),
+                Text('Estado Gomas', style: labelStyle),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Checkbox(
+                      content: Text(
+                        'Izquierda Frontal',
+                      ),
+                      checked: widget.action == FORM_ACTION.CREATE
+                          ? formData.firstTireCondition
+                          : widget.data?.firstTireCondition,
+                      onChanged: (value) => {
+                        setState(() {
+                          if (widget.action == FORM_ACTION.CREATE) {
+                            formData.firstTireCondition = value;
+                          } else {
+                            widget.data?.firstTireCondition = value;
+                          }
+                        })
+                      },
+                    ),
+                    Checkbox(
+                      content: Text(
+                        'Derecha Frontal',
+                      ),
+                      checked: widget.action == FORM_ACTION.CREATE
+                          ? formData.secondTireCondition
+                          : widget.data?.secondTireCondition,
+                      onChanged: (value) => {
+                        setState(() {
+                          if (widget.action == FORM_ACTION.CREATE) {
+                            formData.secondTireCondition = value;
+                          } else {
+                            widget.data?.secondTireCondition = value;
+                          }
+                        })
+                      },
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Checkbox(
+                      content: Text(
+                        'Izquierda Trasera',
+                      ),
+                      checked: widget.action == FORM_ACTION.CREATE
+                          ? formData.thirdTireCondition
+                          : widget.data?.thirdTireCondition,
+                      onChanged: (value) => {
+                        setState(() {
+                          if (widget.action == FORM_ACTION.CREATE) {
+                            formData.thirdTireCondition = value;
+                          } else {
+                            widget.data?.thirdTireCondition = value;
+                          }
+                        })
+                      },
+                    ),
+                    Checkbox(
+                      content: Text(
+                        'Derecha Trasera',
+                      ),
+                      checked: widget.action == FORM_ACTION.CREATE
+                          ? formData.fourthTireCondition
+                          : widget.data?.fourthTireCondition,
+                      onChanged: (value) => {
+                        setState(() {
+                          if (widget.action == FORM_ACTION.CREATE) {
+                            formData.fourthTireCondition = value;
+                          } else {
+                            widget.data?.fourthTireCondition = value;
+                          }
+                        })
+                      },
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20),
                 SizedBox(
                   width: 200,
                   child: DatePicker(
-                    headerStyle:
-                        FluentTheme.of(context).typography.body?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                    headerStyle: labelStyle,
                     header: 'Fecha Inspeccion',
                     selected: widget.action == FORM_ACTION.CREATE
                         ? formData.inspectionDate!
@@ -307,9 +384,7 @@ class _CreateEditInspectionState extends State<CreateEditInspection> {
                 Checkbox(
                   content: Text(
                     'Estado',
-                    style: FluentTheme.of(context).typography.body?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                    style: labelStyle,
                   ),
                   checked: widget.action == FORM_ACTION.CREATE
                       ? formData.status
@@ -334,9 +409,13 @@ class _CreateEditInspectionState extends State<CreateEditInspection> {
           onPressed: () {
             var resultData =
                 widget.action == FORM_ACTION.CREATE ? formData : widget.data;
-            if (formKey.currentState!.validate()) {
-              formKey.currentState!.save();
+            if (resultData?.clientId != null &&
+                resultData?.employeeId != null &&
+                resultData?.vehicleId != null &&
+                resultData?.fuelQuantity != null) {
               AutoRouter.of(context).pop(resultData);
+            } else {
+              _showValidationMessage(context);
             }
           },
           child: Text('Aceptar'),
@@ -348,6 +427,25 @@ class _CreateEditInspectionState extends State<CreateEditInspection> {
           child: Text('Cancelar'),
         )
       ],
+    );
+  }
+
+  void _showValidationMessage(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return ContentDialog(
+          title: Text('Campos requeridos'),
+          content: Text('Compelete los campos requeridos.'),
+          actions: [
+            Button(
+                child: Text('Ok'),
+                onPressed: () {
+                  Navigator.pop(context);
+                })
+          ],
+        );
+      },
     );
   }
 }

@@ -76,6 +76,7 @@ class ListInspectionPage extends StatelessWidget {
                                   ViewUtils.buildTableCell(e.employee?.name),
                                   ViewUtils.buildTableCell(
                                       '${e.vehicle?.brand?.description} - ${e.vehicle?.model?.description}'),
+                                  ViewUtils.buildTableCell(e.client?.name),
                                   ViewUtils.buildTableCell(
                                       e.hasScratches! ? 'Si' : 'No'),
                                   ViewUtils.buildTableCell(
