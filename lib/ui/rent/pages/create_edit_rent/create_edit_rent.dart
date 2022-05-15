@@ -358,6 +358,25 @@ class _CreateEditRentState extends State<CreateEditRent> {
       actions: [
         Button(
           onPressed: () async {
+            // DATE VALIDATION
+            var rentDate = (widget.data?.rentDate ?? formData.rentDate)!;
+            var rentDateUtc =
+                DateTime.utc(rentDate.year, rentDate.month, rentDate.day);
+            var dateNow = DateTime.now();
+            var currentDateUtc =
+                DateTime.utc(dateNow.year, dateNow.month, dateNow.day);
+            if (rentDateUtc.compareTo(currentDateUtc) < 0) {
+              _showValidationMessage(context, 'Fecha de renta no valida.');
+              return;
+            }
+            var returnDate = (widget.data?.returnDate ?? formData.returnDate)!;
+            var returnDateUtc =
+                DateTime.utc(returnDate.year, returnDate.month, returnDate.day);
+            if (returnDateUtc.compareTo(rentDateUtc) < 0) {
+              _showValidationMessage(context, 'Fecha de devolución no valida.');
+              return;
+            }
+
             var resultData =
                 (widget.action == FORM_ACTION.CREATE ? formData : widget.data)!;
             var inspected = await widget.viewModel
@@ -374,7 +393,7 @@ class _CreateEditRentState extends State<CreateEditRent> {
                 resultData.vehicleId != null &&
                 inspected) {
               formKey.currentState?.save();
-              AutoRouter.of(context).pop(resultData);
+              //AutoRouter.of(context).pop(resultData);
             } else {
               var message = !inspected
                   ? 'Este vehiculo necesita inspeccion.'
