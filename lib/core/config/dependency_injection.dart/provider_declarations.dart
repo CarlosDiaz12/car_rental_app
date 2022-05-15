@@ -80,8 +80,8 @@ class DependencyInjection {
         client: dioClient,
       ),
     ),
-    ProxyProvider<Dio, InspectionRepositoryAbstract>(
-      update: (context, dioClient, _) => InspectionRepository(
+    ProxyProvider<Dio, RentRepositoryAbstract>(
+      update: (context, dioClient, _) => RentRepository(
         client: dioClient,
       ),
     ),
