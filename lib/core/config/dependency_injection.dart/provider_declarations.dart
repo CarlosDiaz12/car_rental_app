@@ -1,6 +1,7 @@
 import 'package:car_rental_app/data/repository/brand_repository.dart';
 import 'package:car_rental_app/data/repository/employee_repository.dart';
 import 'package:car_rental_app/data/repository/fuel_type_repository.dart';
+import 'package:car_rental_app/data/repository/inspection_repository.dart';
 import 'package:car_rental_app/data/repository/model_repository.dart';
 import 'package:car_rental_app/data/repository/rent_repository.dart';
 import 'package:car_rental_app/data/repository/vehicle_repository.dart';
@@ -8,6 +9,7 @@ import 'package:car_rental_app/domain/repository/brand_repository_abstract.dart'
 import 'package:car_rental_app/domain/repository/client_repository_abstract.dart';
 import 'package:car_rental_app/domain/repository/employee_respository_abstract.dart';
 import 'package:car_rental_app/domain/repository/fuel_type_repository_abstract.dart';
+import 'package:car_rental_app/domain/repository/inspection_repository.dart';
 import 'package:car_rental_app/domain/repository/model_repository_abstract.dart';
 import 'package:car_rental_app/domain/repository/rent_repository_abstract.dart';
 import 'package:car_rental_app/domain/repository/vehicle_repository_abstract.dart';
@@ -73,8 +75,13 @@ class DependencyInjection {
         client: dioClient,
       ),
     ),
-    ProxyProvider<Dio, RentRepositoryAbstract>(
-      update: (context, dioClient, _) => RentRepository(
+    ProxyProvider<Dio, InspectionRepositoryAbstract>(
+      update: (context, dioClient, _) => InspectionRepository(
+        client: dioClient,
+      ),
+    ),
+    ProxyProvider<Dio, InspectionRepositoryAbstract>(
+      update: (context, dioClient, _) => InspectionRepository(
         client: dioClient,
       ),
     ),

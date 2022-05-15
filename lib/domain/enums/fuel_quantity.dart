@@ -1,0 +1,1 @@
+enum FuelQuantity { QUARTER, HALF, THREEQUARTER, FULL }
