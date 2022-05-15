@@ -45,6 +45,7 @@ class _CreateEditInspectionState extends State<CreateEditInspection> {
     secondTireCondition: false,
     thirdTireCondition: false,
     fourthTireCondition: false,
+    inspectionType: InspectionType.IN,
   );
   final formKey = GlobalKey<FormState>();
   @override
@@ -61,392 +62,396 @@ class _CreateEditInspectionState extends State<CreateEditInspection> {
       ),
       title: Text('$title Inspeccion',
           style: FluentTheme.of(context).typography.subtitle),
-      content: Column(
-        children: [
-          Form(
-            key: formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      width: 200,
-                      child: LabeledFieldWidget(
-                        label: 'Vehiculo',
-                        child: Combobox<int>(
-                          placeholder: Text('Selecciona'),
-                          isExpanded: true,
-                          items: widget.vehicleList
-                              .map((e) => ComboboxItem<int>(
-                                    value: e.id,
-                                    child: Text(
-                                        '${e.brand?.description} ${e.model?.description}'),
-                                  ))
-                              .toList(),
-                          value: widget.action == FORM_ACTION.CREATE
-                              ? formData.vehicleId
-                              : widget.data?.vehicleId,
-                          onChanged: (value) {
-                            setState(() {
-                              if (value != null) {
-                                if (widget.action == FORM_ACTION.CREATE) {
-                                  formData.vehicleId = value;
-                                } else {
-                                  widget.data?.vehicleId = value;
+      content: SingleChildScrollView(
+        child: Column(
+          children: [
+            Form(
+              key: formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: 200,
+                        child: LabeledFieldWidget(
+                          label: 'Vehiculo',
+                          child: Combobox<int>(
+                            placeholder: Text('Selecciona'),
+                            isExpanded: true,
+                            items: widget.vehicleList
+                                .map((e) => ComboboxItem<int>(
+                                      value: e.id,
+                                      child: Text(
+                                          '${e.brand?.description} ${e.model?.description}'),
+                                    ))
+                                .toList(),
+                            value: widget.action == FORM_ACTION.CREATE
+                                ? formData.vehicleId
+                                : widget.data?.vehicleId,
+                            onChanged: (value) {
+                              setState(() {
+                                if (value != null) {
+                                  if (widget.action == FORM_ACTION.CREATE) {
+                                    formData.vehicleId = value;
+                                  } else {
+                                    widget.data?.vehicleId = value;
+                                  }
                                 }
-                              }
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 200,
-                      child: LabeledFieldWidget(
-                        label: 'Cliente',
-                        child: Combobox<int>(
-                          placeholder: Text('Selecciona'),
-                          isExpanded: true,
-                          items: widget.clientList
-                              .map((e) => ComboboxItem<int>(
-                                    value: e.id,
-                                    child: Text('${e.name}'),
-                                  ))
-                              .toList(),
-                          value: widget.action == FORM_ACTION.CREATE
-                              ? formData.clientId
-                              : widget.data?.clientId,
-                          onChanged: (value) {
-                            setState(() {
-                              if (value != null) {
-                                if (widget.action == FORM_ACTION.CREATE) {
-                                  formData.clientId = value;
-                                } else {
-                                  widget.data?.clientId = value;
-                                }
-                              }
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 200,
-                      child: LabeledFieldWidget(
-                        label: 'Empleado',
-                        child: Combobox<int>(
-                          placeholder: Text('Selecciona'),
-                          isExpanded: true,
-                          items: widget.employeeList
-                              .map((e) => ComboboxItem<int>(
-                                    value: e.id,
-                                    child: Text('${e.name}'),
-                                  ))
-                              .toList(),
-                          value: widget.action == FORM_ACTION.CREATE
-                              ? formData.employeeId
-                              : widget.data?.employeeId,
-                          onChanged: (value) {
-                            setState(() {
-                              if (value != null) {
-                                if (widget.action == FORM_ACTION.CREATE) {
-                                  formData.employeeId = value;
-                                } else {
-                                  widget.data?.employeeId = value;
-                                }
-                              }
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 200,
-                      child: LabeledFieldWidget(
-                        label: 'C. Combustible',
-                        child: Combobox<int>(
-                          placeholder: Text('Selecciona'),
-                          isExpanded: true,
-                          items: FuelQuantity.values
-                              .map((e) => ComboboxItem<int>(
-                                    value: e.index,
-                                    child:
-                                        Text(ViewUtils.getFuelQuantityText(e)),
-                                  ))
-                              .toList(),
-                          value: widget.action == FORM_ACTION.CREATE
-                              ? formData.fuelQuantity?.index
-                              : widget.data?.fuelQuantity?.index,
-                          onChanged: (value) {
-                            setState(() {
-                              if (value != null) {
-                                if (widget.action == FORM_ACTION.CREATE) {
-                                  formData.fuelQuantity =
-                                      FuelQuantity.values[value];
-                                } else {
-                                  widget.data?.fuelQuantity =
-                                      FuelQuantity.values[value];
-                                }
-                              }
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 30),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Checkbox(
-                      content: Text(
-                        'Ralladuras',
-                        style: labelStyle,
-                      ),
-                      checked: widget.action == FORM_ACTION.CREATE
-                          ? formData.hasScratches
-                          : widget.data?.hasScratches,
-                      onChanged: (value) => {
-                        setState(() {
-                          if (widget.action == FORM_ACTION.CREATE) {
-                            formData.hasScratches = value;
-                          } else {
-                            widget.data?.hasScratches = value;
-                          }
-                        })
-                      },
-                    ),
-                    Checkbox(
-                      content: Text(
-                        'Tiene Repuesta',
-                        style: labelStyle,
-                      ),
-                      checked: widget.action == FORM_ACTION.CREATE
-                          ? formData.hasSpareTire
-                          : widget.data?.hasSpareTire,
-                      onChanged: (value) => {
-                        setState(() {
-                          if (widget.action == FORM_ACTION.CREATE) {
-                            formData.hasSpareTire = value;
-                          } else {
-                            widget.data?.hasSpareTire = value;
-                          }
-                        })
-                      },
-                    ),
-                    Checkbox(
-                      content: Text(
-                        'Tiene Gato',
-                        style: labelStyle,
-                      ),
-                      checked: widget.action == FORM_ACTION.CREATE
-                          ? formData.hasManualJack
-                          : widget.data?.hasManualJack,
-                      onChanged: (value) => {
-                        setState(() {
-                          if (widget.action == FORM_ACTION.CREATE) {
-                            formData.hasManualJack = value;
-                          } else {
-                            widget.data?.hasManualJack = value;
-                          }
-                        })
-                      },
-                    ),
-                    Checkbox(
-                      content: Text(
-                        'Rotura Cristal',
-                        style: labelStyle,
-                      ),
-                      checked: widget.action == FORM_ACTION.CREATE
-                          ? formData.hasGlassBreakage
-                          : widget.data?.hasGlassBreakage,
-                      onChanged: (value) => {
-                        setState(() {
-                          if (widget.action == FORM_ACTION.CREATE) {
-                            formData.hasGlassBreakage = value;
-                          } else {
-                            widget.data?.hasGlassBreakage = value;
-                          }
-                        })
-                      },
-                    ),
-                    SizedBox(width: 150),
-                  ],
-                ),
-                SizedBox(height: 20),
-                Text('Estado Gomas', style: labelStyle),
-                SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Checkbox(
-                      content: Text(
-                        'Izquierda Frontal',
-                      ),
-                      checked: widget.action == FORM_ACTION.CREATE
-                          ? formData.firstTireCondition
-                          : widget.data?.firstTireCondition,
-                      onChanged: (value) => {
-                        setState(() {
-                          if (widget.action == FORM_ACTION.CREATE) {
-                            formData.firstTireCondition = value;
-                          } else {
-                            widget.data?.firstTireCondition = value;
-                          }
-                        })
-                      },
-                    ),
-                    Checkbox(
-                      content: Text(
-                        'Derecha Frontal',
-                      ),
-                      checked: widget.action == FORM_ACTION.CREATE
-                          ? formData.secondTireCondition
-                          : widget.data?.secondTireCondition,
-                      onChanged: (value) => {
-                        setState(() {
-                          if (widget.action == FORM_ACTION.CREATE) {
-                            formData.secondTireCondition = value;
-                          } else {
-                            widget.data?.secondTireCondition = value;
-                          }
-                        })
-                      },
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Checkbox(
-                      content: Text(
-                        'Izquierda Trasera',
-                      ),
-                      checked: widget.action == FORM_ACTION.CREATE
-                          ? formData.thirdTireCondition
-                          : widget.data?.thirdTireCondition,
-                      onChanged: (value) => {
-                        setState(() {
-                          if (widget.action == FORM_ACTION.CREATE) {
-                            formData.thirdTireCondition = value;
-                          } else {
-                            widget.data?.thirdTireCondition = value;
-                          }
-                        })
-                      },
-                    ),
-                    Checkbox(
-                      content: Text(
-                        'Derecha Trasera',
-                      ),
-                      checked: widget.action == FORM_ACTION.CREATE
-                          ? formData.fourthTireCondition
-                          : widget.data?.fourthTireCondition,
-                      onChanged: (value) => {
-                        setState(() {
-                          if (widget.action == FORM_ACTION.CREATE) {
-                            formData.fourthTireCondition = value;
-                          } else {
-                            widget.data?.fourthTireCondition = value;
-                          }
-                        })
-                      },
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: 200,
-                      child: LabeledFieldWidget(
-                        label: 'Tipo Inspeccion',
-                        child: Combobox<int>(
-                          placeholder: Text('Selecciona'),
-                          isExpanded: true,
-                          items: InspectionType.values
-                              .map((e) => ComboboxItem<int>(
-                                    value: e.index,
-                                    child: Text(
-                                        ViewUtils.getInspectionTypeText(e)),
-                                  ))
-                              .toList(),
-                          value: widget.action == FORM_ACTION.CREATE
-                              ? formData.inspectionType?.index
-                              : widget.data?.inspectionType?.index,
-                          onChanged: (value) {
-                            setState(() {
-                              if (value != null) {
-                                if (widget.action == FORM_ACTION.CREATE) {
-                                  formData.inspectionType =
-                                      InspectionType.values[value];
-                                } else {
-                                  widget.data?.inspectionType =
-                                      InspectionType.values[value];
-                                }
-                              }
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 15),
-                    SizedBox(
-                      width: 200,
-                      child: DatePicker(
-                        headerStyle: labelStyle,
-                        header: 'Fecha Inspeccion',
-                        selected: widget.action == FORM_ACTION.CREATE
-                            ? formData.inspectionDate!
-                            : widget.data!.inspectionDate!,
-                        onChanged: (value) => {
-                          setState(
-                            () {
-                              if (widget.action == FORM_ACTION.CREATE) {
-                                formData.inspectionDate = value;
-                              } else {
-                                widget.data?.inspectionDate = value;
-                              }
+                              });
                             },
-                          )
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 200,
+                        child: LabeledFieldWidget(
+                          label: 'Cliente',
+                          child: Combobox<int>(
+                            placeholder: Text('Selecciona'),
+                            isExpanded: true,
+                            items: widget.clientList
+                                .map((e) => ComboboxItem<int>(
+                                      value: e.id,
+                                      child: Text('${e.name}'),
+                                    ))
+                                .toList(),
+                            value: widget.action == FORM_ACTION.CREATE
+                                ? formData.clientId
+                                : widget.data?.clientId,
+                            onChanged: (value) {
+                              setState(() {
+                                if (value != null) {
+                                  if (widget.action == FORM_ACTION.CREATE) {
+                                    formData.clientId = value;
+                                  } else {
+                                    widget.data?.clientId = value;
+                                  }
+                                }
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 200,
+                        child: LabeledFieldWidget(
+                          label: 'Empleado',
+                          child: Combobox<int>(
+                            placeholder: Text('Selecciona'),
+                            isExpanded: true,
+                            items: widget.employeeList
+                                .map((e) => ComboboxItem<int>(
+                                      value: e.id,
+                                      child: Text('${e.name}'),
+                                    ))
+                                .toList(),
+                            value: widget.action == FORM_ACTION.CREATE
+                                ? formData.employeeId
+                                : widget.data?.employeeId,
+                            onChanged: (value) {
+                              setState(() {
+                                if (value != null) {
+                                  if (widget.action == FORM_ACTION.CREATE) {
+                                    formData.employeeId = value;
+                                  } else {
+                                    widget.data?.employeeId = value;
+                                  }
+                                }
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 200,
+                        child: LabeledFieldWidget(
+                          label: 'C. Combustible',
+                          child: Combobox<int>(
+                            placeholder: Text('Selecciona'),
+                            isExpanded: true,
+                            items: FuelQuantity.values
+                                .map((e) => ComboboxItem<int>(
+                                      value: e.index,
+                                      child: Text(
+                                          ViewUtils.getFuelQuantityText(e)),
+                                    ))
+                                .toList(),
+                            value: widget.action == FORM_ACTION.CREATE
+                                ? formData.fuelQuantity?.index
+                                : widget.data?.fuelQuantity?.index,
+                            onChanged: (value) {
+                              setState(() {
+                                if (value != null) {
+                                  if (widget.action == FORM_ACTION.CREATE) {
+                                    formData.fuelQuantity =
+                                        FuelQuantity.values[value];
+                                  } else {
+                                    widget.data?.fuelQuantity =
+                                        FuelQuantity.values[value];
+                                  }
+                                }
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 30),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Checkbox(
+                        content: Text(
+                          'Ralladuras',
+                          style: labelStyle,
+                        ),
+                        checked: widget.action == FORM_ACTION.CREATE
+                            ? formData.hasScratches
+                            : widget.data?.hasScratches,
+                        onChanged: (value) => {
+                          setState(() {
+                            if (widget.action == FORM_ACTION.CREATE) {
+                              formData.hasScratches = value;
+                            } else {
+                              widget.data?.hasScratches = value;
+                            }
+                          })
                         },
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
-                Checkbox(
-                  content: Text(
-                    'Estado',
-                    style: labelStyle,
+                      Checkbox(
+                        content: Text(
+                          'Tiene Repuesta',
+                          style: labelStyle,
+                        ),
+                        checked: widget.action == FORM_ACTION.CREATE
+                            ? formData.hasSpareTire
+                            : widget.data?.hasSpareTire,
+                        onChanged: (value) => {
+                          setState(() {
+                            if (widget.action == FORM_ACTION.CREATE) {
+                              formData.hasSpareTire = value;
+                            } else {
+                              widget.data?.hasSpareTire = value;
+                            }
+                          })
+                        },
+                      ),
+                      Checkbox(
+                        content: Text(
+                          'Tiene Gato',
+                          style: labelStyle,
+                        ),
+                        checked: widget.action == FORM_ACTION.CREATE
+                            ? formData.hasManualJack
+                            : widget.data?.hasManualJack,
+                        onChanged: (value) => {
+                          setState(() {
+                            if (widget.action == FORM_ACTION.CREATE) {
+                              formData.hasManualJack = value;
+                            } else {
+                              widget.data?.hasManualJack = value;
+                            }
+                          })
+                        },
+                      ),
+                      Checkbox(
+                        content: Text(
+                          'Rotura Cristal',
+                          style: labelStyle,
+                        ),
+                        checked: widget.action == FORM_ACTION.CREATE
+                            ? formData.hasGlassBreakage
+                            : widget.data?.hasGlassBreakage,
+                        onChanged: (value) => {
+                          setState(() {
+                            if (widget.action == FORM_ACTION.CREATE) {
+                              formData.hasGlassBreakage = value;
+                            } else {
+                              widget.data?.hasGlassBreakage = value;
+                            }
+                          })
+                        },
+                      ),
+                      SizedBox(width: 150),
+                    ],
                   ),
-                  checked: widget.action == FORM_ACTION.CREATE
-                      ? formData.status
-                      : widget.data?.status,
-                  onChanged: (value) => {
-                    setState(() {
-                      if (widget.action == FORM_ACTION.CREATE) {
-                        formData.status = value;
-                      } else {
-                        widget.data?.status = value;
-                      }
-                    })
-                  },
-                )
-              ],
-            ),
-          )
-        ],
+                  SizedBox(height: 20),
+                  Text('Estado Gomas', style: labelStyle),
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Checkbox(
+                        content: Text(
+                          'Izquierda Frontal',
+                        ),
+                        checked: widget.action == FORM_ACTION.CREATE
+                            ? formData.firstTireCondition
+                            : widget.data?.firstTireCondition,
+                        onChanged: (value) => {
+                          setState(() {
+                            if (widget.action == FORM_ACTION.CREATE) {
+                              formData.firstTireCondition = value;
+                            } else {
+                              widget.data?.firstTireCondition = value;
+                            }
+                          })
+                        },
+                      ),
+                      Checkbox(
+                        content: Text(
+                          'Derecha Frontal',
+                        ),
+                        checked: widget.action == FORM_ACTION.CREATE
+                            ? formData.secondTireCondition
+                            : widget.data?.secondTireCondition,
+                        onChanged: (value) => {
+                          setState(() {
+                            if (widget.action == FORM_ACTION.CREATE) {
+                              formData.secondTireCondition = value;
+                            } else {
+                              widget.data?.secondTireCondition = value;
+                            }
+                          })
+                        },
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Checkbox(
+                        content: Text(
+                          'Izquierda Trasera',
+                        ),
+                        checked: widget.action == FORM_ACTION.CREATE
+                            ? formData.thirdTireCondition
+                            : widget.data?.thirdTireCondition,
+                        onChanged: (value) => {
+                          setState(() {
+                            if (widget.action == FORM_ACTION.CREATE) {
+                              formData.thirdTireCondition = value;
+                            } else {
+                              widget.data?.thirdTireCondition = value;
+                            }
+                          })
+                        },
+                      ),
+                      Checkbox(
+                        content: Text(
+                          'Derecha Trasera',
+                        ),
+                        checked: widget.action == FORM_ACTION.CREATE
+                            ? formData.fourthTireCondition
+                            : widget.data?.fourthTireCondition,
+                        onChanged: (value) => {
+                          setState(() {
+                            if (widget.action == FORM_ACTION.CREATE) {
+                              formData.fourthTireCondition = value;
+                            } else {
+                              widget.data?.fourthTireCondition = value;
+                            }
+                          })
+                        },
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      /*
+                      SizedBox(
+                        width: 200,
+                        child: LabeledFieldWidget(
+                          label: 'Tipo Inspeccion',
+                          child: Combobox<int>(
+                            placeholder: Text('Selecciona'),
+                            isExpanded: true,
+                            items: InspectionType.values
+                                .map((e) => ComboboxItem<int>(
+                                      value: e.index,
+                                      child: Text(
+                                          ViewUtils.getInspectionTypeText(e)),
+                                    ))
+                                .toList(),
+                            value: widget.action == FORM_ACTION.CREATE
+                                ? formData.inspectionType?.index
+                                : widget.data?.inspectionType?.index,
+                            onChanged: (value) {
+                              setState(() {
+                                if (value != null) {
+                                  if (widget.action == FORM_ACTION.CREATE) {
+                                    formData.inspectionType =
+                                        InspectionType.values[value];
+                                  } else {
+                                    widget.data?.inspectionType =
+                                        InspectionType.values[value];
+                                  }
+                                }
+                              });
+                            },
+                          ),
+                        ),
+                      ),                  
+                      SizedBox(width: 15),
+                      */
+                      SizedBox(
+                        width: 200,
+                        child: DatePicker(
+                          headerStyle: labelStyle,
+                          header: 'Fecha Inspeccion',
+                          selected: widget.action == FORM_ACTION.CREATE
+                              ? formData.inspectionDate!
+                              : widget.data!.inspectionDate!,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                if (widget.action == FORM_ACTION.CREATE) {
+                                  formData.inspectionDate = value;
+                                } else {
+                                  widget.data?.inspectionDate = value;
+                                }
+                              },
+                            )
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Checkbox(
+                    content: Text(
+                      'Estado',
+                      style: labelStyle,
+                    ),
+                    checked: widget.action == FORM_ACTION.CREATE
+                        ? formData.status
+                        : widget.data?.status,
+                    onChanged: (value) => {
+                      setState(() {
+                        if (widget.action == FORM_ACTION.CREATE) {
+                          formData.status = value;
+                        } else {
+                          widget.data?.status = value;
+                        }
+                      })
+                    },
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
       actions: [
         Button(
@@ -465,11 +470,10 @@ class _CreateEditInspectionState extends State<CreateEditInspection> {
                 resultData.employeeId != null &&
                 resultData.vehicleId != null &&
                 resultData.fuelQuantity != null &&
-                resultData.inspectionType != null &&
-                !inspected) {
+                inspected) {
               AutoRouter.of(context).pop(resultData);
             } else {
-              var message = inspected
+              var message = !inspected
                   ? 'Actualmente existe una inspeccion de tipo: ${ViewUtils.getInspectionTypeText(resultData.inspectionType!)} para este vehiculo, cliente y fecha.'
                   : 'Complete los campos requeridos.';
               _showValidationMessage(context, message);

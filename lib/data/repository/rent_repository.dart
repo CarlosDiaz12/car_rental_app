@@ -38,7 +38,7 @@ class RentRepository extends RentRepositoryAbstract {
       object.vehicle = null;
       object.id = 0;
       var request = await _client.post(
-        '/brand',
+        '/rent',
         data: object.toMap(),
       );
       var response = request.data['data'];
@@ -81,6 +81,9 @@ class RentRepository extends RentRepositoryAbstract {
   @override
   Future<Either<Exception, bool>> update(Rent object) async {
     try {
+      object.client = null;
+      object.employee = null;
+      object.vehicle = null;
       var request = await _client.put(
         '/rent',
         data: object.toMap(),

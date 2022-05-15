@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:car_rental_app/domain/models/rent.dart';
+import 'package:car_rental_app/domain/repository/inspection_repository.dart';
 import 'package:car_rental_app/domain/repository/rent_repository_abstract.dart';
+import 'package:car_rental_app/ui/rent/pages/create_edit_rent/create_edit_rent.dart';
 import 'package:car_rental_app/ui/rent/pages/list_rent/list_rent_viewmodel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
@@ -9,6 +11,9 @@ import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../../../domain/enums/form_action_enum.dart';
+import '../../../../domain/repository/client_repository_abstract.dart';
+import '../../../../domain/repository/employee_respository_abstract.dart';
+import '../../../../domain/repository/vehicle_repository_abstract.dart';
 import '../../../common/view_utils.dart';
 import '../../../common/widgets/table_widget.dart';
 
@@ -19,10 +24,16 @@ class ListRentPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<ListRentViewModel>.reactive(
       viewModelBuilder: () => ListRentViewModel(
-          repository: Provider.of<RentRepositoryAbstract>(context)),
+        repository: Provider.of<RentRepositoryAbstract>(context),
+        clientRepository: Provider.of<ClientRepositoryAbstract>(context),
+        employeeRepository: Provider.of<EmployeeRepositoryAbstract>(context),
+        vehicleRepository: Provider.of<VehicleRepositoryAbstract>(context),
+        inspectionRepository:
+            Provider.of<InspectionRepositoryAbstract>(context),
+      ),
       onModelReady: (viewModel) async {
         await viewModel.loadData();
-        // await viewModel.loadBrandData();
+        await viewModel.loadValuesData();
       },
       builder: (context, viewModel, _) {
         return Padding(
@@ -31,7 +42,7 @@ class ListRentPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             header: PageHeader(
               leading: Text(
-                'Modelos',
+                'Rentas',
                 style: FluentTheme.of(context).typography.title!,
               ),
             ),
@@ -50,6 +61,7 @@ class ListRentPage extends StatelessWidget {
                         ),
                         SizedBox(height: 10),
                         TableWidget(
+                          columnWidth: 24,
                           columnNames: viewModel.columnNames,
                           rows: [
                             ...viewModel.list!.map(
@@ -110,12 +122,14 @@ class ListRentPage extends StatelessWidget {
 
   Future<void> manageCreateEdit(BuildContext context, FORM_ACTION action,
       ListRentViewModel viewModel, Rent? data) async {
-    /*
     var response = await fluent.showDialog<Rent?>(
       context: context,
       builder: (context) {
-        return CreateEditModel(
-          brandList: viewModel.brandList!,
+        return CreateEditRent(
+          viewModel: viewModel,
+          employeeList: viewModel.employeeList!,
+          clientList: viewModel.clientList!,
+          vehicleList: viewModel.vehicleList!,
           action: action,
           data: data,
         );
@@ -133,7 +147,6 @@ class ListRentPage extends StatelessWidget {
       AutoRouter.of(context).pop();
       viewModel.loadData();
     }
-    */
   }
 
   Future<void> _showLoading(BuildContext context) async {

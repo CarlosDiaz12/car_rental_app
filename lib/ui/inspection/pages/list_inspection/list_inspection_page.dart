@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:car_rental_app/domain/enums/inspection_type.dart';
 import 'package:car_rental_app/domain/models/inspection.dart';
 import 'package:car_rental_app/domain/repository/client_repository_abstract.dart';
 import 'package:car_rental_app/domain/repository/employee_respository_abstract.dart';
@@ -125,6 +126,7 @@ class ListInspectionPage extends StatelessWidget {
 
   Future<void> manageCreateEdit(BuildContext context, FORM_ACTION action,
       ListInspectionViewModel viewModel, Inspection? data) async {
+    data?.inspectionType = InspectionType.IN;
     var response = await fluent.showDialog<Inspection?>(
       context: context,
       builder: (context) {
