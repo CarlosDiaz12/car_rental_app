@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:car_rental_app/domain/dto/is_available_for_rent_dto.dart';
 import 'package:car_rental_app/domain/enums/inspection_type.dart';
 import 'package:car_rental_app/domain/models/rent.dart';
 import 'package:car_rental_app/ui/rent/pages/list_rent/list_rent_viewmodel.dart';
@@ -383,21 +384,34 @@ class _CreateEditRentState extends State<CreateEditRent> {
                 .checkAvailability(CheckVehicleAvailabilityDto(
               clientId: resultData.clientId!,
               vehicleId: resultData.vehicleId!,
-              inspectionDate: resultData.rentDate!,
+              inspectionDate: DateTime.now(),
               type: InspectionType.IN,
+            ));
+
+            var availableForRent = await widget.viewModel
+                .checkAvailabilityForRent(IsAvailableForRentDto(
+              vehicleId: resultData.vehicleId!,
+              rentDate: rentDate,
+              returnDate: returnDate,
             ));
 
             if (formKey.currentState!.validate() &&
                 resultData.clientId != null &&
                 resultData.employeeId != null &&
                 resultData.vehicleId != null &&
+                availableForRent &&
                 inspected) {
               formKey.currentState?.save();
-              //AutoRouter.of(context).pop(resultData);
+              AutoRouter.of(context).pop(resultData);
             } else {
-              var message = !inspected
-                  ? 'Este vehiculo necesita inspeccion.'
-                  : 'Complete los campos requeridos.';
+              var message = 'Complete los campos requeridos.';
+              if (!availableForRent) {
+                message =
+                    'Este vehiculo no se encuentra disponible en el rango de fecha seleccionado.';
+              } else if (!inspected) {
+                message = 'Este vehiculo necesita inspeccion.';
+              }
+
               _showValidationMessage(context, message);
             }
           },

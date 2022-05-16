@@ -1,3 +1,4 @@
+import 'package:car_rental_app/domain/dto/is_available_for_rent_dto.dart';
 import 'package:car_rental_app/domain/models/rent.dart';
 import 'package:car_rental_app/domain/repository/inspection_repository.dart';
 import 'package:car_rental_app/domain/repository/rent_repository_abstract.dart';
@@ -52,6 +53,18 @@ class ListRentViewModel extends BaseViewModel {
   Future<bool> checkAvailability(CheckVehicleAvailabilityDto data) async {
     clearErrors();
     var res = await inspectionRepository.checkVehicleAvailability(data);
+    var response = false;
+    res.fold((ex) {
+      setError(ex);
+    }, (data) {
+      response = data;
+    });
+    return response;
+  }
+
+  Future<bool> checkAvailabilityForRent(IsAvailableForRentDto data) async {
+    clearErrors();
+    var res = await repository.isAvailableForRent(data);
     var response = false;
     res.fold((ex) {
       setError(ex);

@@ -1,4 +1,5 @@
 import 'package:car_rental_app/data/remote/response/get_all_rent_response.dart';
+import 'package:car_rental_app/domain/dto/is_available_for_rent_dto.dart';
 import 'package:car_rental_app/domain/models/rent.dart';
 import 'package:car_rental_app/domain/repository/rent_repository_abstract.dart';
 import 'package:dartz/dartz.dart';
@@ -87,6 +88,29 @@ class RentRepository extends RentRepositoryAbstract {
       var request = await _client.put(
         '/rent',
         data: object.toMap(),
+      );
+      var response = request.data['data'];
+      return Right(response);
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 404) {
+        return Left(NotFoundException());
+      }
+      if (e.response?.statusCode == 401) {
+        return Left(NotAuthorizedException());
+      }
+      return Left(ServerException(null, e.response?.statusCode ?? 500));
+    } catch (e) {
+      return Left(UnknownErrorException('Error inesperado: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Exception, bool>> isAvailableForRent(
+      IsAvailableForRentDto dto) async {
+    try {
+      var request = await _client.get(
+        '/rent/available',
+        queryParameters: dto.toMap(),
       );
       var response = request.data['data'];
       return Right(response);

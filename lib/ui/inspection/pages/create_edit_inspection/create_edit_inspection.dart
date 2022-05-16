@@ -470,10 +470,10 @@ class _CreateEditInspectionState extends State<CreateEditInspection> {
                 resultData.employeeId != null &&
                 resultData.vehicleId != null &&
                 resultData.fuelQuantity != null &&
-                inspected) {
+                !inspected) {
               AutoRouter.of(context).pop(resultData);
             } else {
-              var message = !inspected
+              var message = inspected
                   ? 'Actualmente existe una inspeccion de tipo: ${ViewUtils.getInspectionTypeText(resultData.inspectionType!)} para este vehiculo, cliente y fecha.'
                   : 'Complete los campos requeridos.';
               _showValidationMessage(context, message);

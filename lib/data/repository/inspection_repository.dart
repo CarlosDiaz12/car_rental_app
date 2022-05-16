@@ -105,7 +105,7 @@ class InspectionRepository extends InspectionRepositoryAbstract {
       CheckVehicleAvailabilityDto object) async {
     try {
       var request = await _client.get(
-        '/inspection/available',
+        '/inspection/inspected',
         queryParameters: object.toMap(),
       );
       var response = request.data['data'];

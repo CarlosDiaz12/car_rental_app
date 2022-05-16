@@ -81,7 +81,7 @@ class ListRentPage extends StatelessWidget {
                                   ViewUtils.buildTableCell(
                                       ViewUtils.formatDate(e.rentDate!)),
                                   ViewUtils.buildTableCell(
-                                      ViewUtils.formatDate(e.rentDate!)),
+                                      ViewUtils.formatDate(e.returnDate!)),
                                   ViewUtils.buildTableCell(e.ratePerDay),
                                   ViewUtils.buildTableCell(e.daysQuantity),
                                   ViewUtils.buildTableCell((e.status == true)
