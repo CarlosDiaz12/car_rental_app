@@ -15,6 +15,7 @@ import '../../../../domain/repository/client_repository_abstract.dart';
 import '../../../../domain/repository/employee_respository_abstract.dart';
 import '../../../../domain/repository/vehicle_repository_abstract.dart';
 import '../../../common/view_utils.dart';
+import '../../../common/widgets/labeled_flied_widget.dart';
 import '../../../common/widgets/table_widget.dart';
 
 class ListRentPage extends StatelessWidget {
@@ -36,6 +37,9 @@ class ListRentPage extends StatelessWidget {
         await viewModel.loadValuesData();
       },
       builder: (context, viewModel, _) {
+        var labelStyle = FluentTheme.of(context).typography.body?.copyWith(
+              fontWeight: FontWeight.bold,
+            );
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: ScaffoldPage(
@@ -51,7 +55,71 @@ class ListRentPage extends StatelessWidget {
                   ? Center(child: ProgressRing())
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
+                        fluent.Card(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: 200,
+                                child: LabeledFieldWidget(
+                                  label: 'Cliente',
+                                  child: TextFormBox(
+                                    placeholder: 'Cliente',
+                                    onChanged: (value) {
+                                      viewModel.filters.client = value;
+                                    },
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 20),
+                              SizedBox(
+                                width: 200,
+                                child: LabeledFieldWidget(
+                                  label: 'Vehiculo',
+                                  child: TextFormBox(
+                                    placeholder: 'Vehiculo',
+                                    onChanged: (value) {
+                                      viewModel.filters.vehicle = value;
+                                    },
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 20),
+                              SizedBox(
+                                width: 200,
+                                child: DatePicker(
+                                  selected: viewModel.filters.rentDate!,
+                                  headerStyle: labelStyle,
+                                  header: 'Fecha Renta',
+                                  onChanged: (value) {
+                                    viewModel.setRentDate(value);
+                                  },
+                                ),
+                              ),
+                              SizedBox(width: 20),
+                              LabeledFieldWidget(
+                                label: '',
+                                child: Button(
+                                  onPressed: viewModel.filterList,
+                                  child: Text('Filtrar'),
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              LabeledFieldWidget(
+                                label: '',
+                                child: Button(
+                                  onPressed: viewModel.loadData,
+                                  child: Text('Limpiar'),
+                                ),
+                              ),
+                              SizedBox(width: 200),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 10),
                         Button(
                           onPressed: () async {
                             manageCreateEdit(
@@ -64,7 +132,7 @@ class ListRentPage extends StatelessWidget {
                           columnWidth: 24,
                           columnNames: viewModel.columnNames,
                           rows: [
-                            ...viewModel.list!.map(
+                            ...viewModel.filteredList!.map(
                               (e) => DataRow(
                                 cells: [
                                   ViewUtils.buildTableCell(

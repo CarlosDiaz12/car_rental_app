@@ -1,4 +1,5 @@
 import 'package:car_rental_app/domain/dto/is_available_for_rent_dto.dart';
+import 'package:car_rental_app/domain/dto/rent_filter_dto.dart';
 import 'package:car_rental_app/domain/models/rent.dart';
 import 'package:car_rental_app/domain/repository/inspection_repository.dart';
 import 'package:car_rental_app/domain/repository/rent_repository_abstract.dart';
@@ -21,6 +22,9 @@ class ListRentViewModel extends BaseViewModel {
   List<Rent>? _list;
   List<Rent>? get list => _list;
 
+  List<Rent>? _filteredList;
+  List<Rent>? get filteredList => _filteredList;
+
   List<Vehicle>? _vehicleList;
   List<Vehicle>? get vehicleList => _vehicleList;
 
@@ -42,6 +46,12 @@ class ListRentViewModel extends BaseViewModel {
     'Estado',
     'Acciones'
   ];
+
+  RentFilterDto filters = RentFilterDto(
+    rentDate: DateTime.now(),
+    client: '',
+    vehicle: '',
+  );
   ListRentViewModel({
     required this.repository,
     required this.clientRepository,
@@ -49,6 +59,45 @@ class ListRentViewModel extends BaseViewModel {
     required this.vehicleRepository,
     required this.inspectionRepository,
   });
+
+  void setRentDate(DateTime date) {
+    filters.rentDate = date;
+    notifyListeners();
+  }
+
+  void filterList() {
+    var filteredList = _list;
+    if (filters.client != null && filters.client!.isNotEmpty) {
+      filteredList = filteredList
+          ?.where((element) => element.client!.name!
+              .toLowerCase()
+              .contains(filters.client!.toLowerCase()))
+          .toList();
+    }
+    if (filters.vehicle != null && filters.vehicle!.isNotEmpty) {
+      filteredList = filteredList
+          ?.where((element) => (element.vehicle!.brand!.description! +
+                  element.vehicle!.model!.description!)
+              .toLowerCase()
+              .contains(filters.vehicle!.toLowerCase()))
+          .toList();
+    }
+
+    if (filters.rentDate != null) {
+      var rentDate = filters.rentDate!;
+      var rentDateUtc =
+          DateTime.utc(rentDate.year, rentDate.month, rentDate.day);
+      filteredList = filteredList!
+          .where((element) =>
+              element.rentDate!.day == rentDateUtc.day &&
+              element.rentDate!.month == rentDateUtc.month &&
+              element.rentDate!.year == rentDateUtc.year)
+          .toList();
+    }
+
+    _filteredList = filteredList;
+    notifyListeners();
+  }
 
   Future<bool> checkAvailability(CheckVehicleAvailabilityDto data) async {
     clearErrors();
@@ -82,6 +131,7 @@ class ListRentViewModel extends BaseViewModel {
       setError(ex);
     }, (data) {
       _list = data;
+      _filteredList = data;
     });
     setBusy(false);
   }
