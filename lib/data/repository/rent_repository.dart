@@ -1,21 +1,22 @@
-import 'package:car_rental_app/data/remote/response/get_all_inspection_response.dart';
-import 'package:car_rental_app/domain/dto/check_vehicle_availability_dto.dart';
-import 'package:car_rental_app/domain/models/inspection.dart';
-import 'package:car_rental_app/domain/repository/inspection_repository.dart';
+import 'package:car_rental_app/data/remote/response/get_all_rent_response.dart';
+import 'package:car_rental_app/domain/dto/is_available_for_rent_dto.dart';
+import 'package:car_rental_app/domain/models/rent.dart';
+import 'package:car_rental_app/domain/repository/rent_repository_abstract.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+
 import '../../core/error/exceptions.dart';
 
-class InspectionRepository extends InspectionRepositoryAbstract {
+class RentRepository extends RentRepositoryAbstract {
   final Dio _client;
-  InspectionRepository({required Dio client}) : _client = client;
+  RentRepository({required Dio client}) : _client = client;
   @override
-  Future<Either<Exception, List<Inspection>>> getAll() async {
+  Future<Either<Exception, List<Rent>>> getAll() async {
     try {
       var request = await _client.get(
-        '/inspection',
+        '/rent',
       );
-      var response = GetAllInspectionResponse.fromMap(request.data);
+      var response = GetAllRentResponse.fromMap(request.data);
       return Right(response.data!);
     } on DioError catch (e) {
       if (e.response?.statusCode == 404) {
@@ -31,11 +32,14 @@ class InspectionRepository extends InspectionRepositoryAbstract {
   }
 
   @override
-  Future<Either<Exception, bool>> create(Inspection object) async {
+  Future<Either<Exception, bool>> create(Rent object) async {
     try {
+      object.client = null;
+      object.employee = null;
+      object.vehicle = null;
       object.id = 0;
       var request = await _client.post(
-        '/inspection',
+        '/rent',
         data: object.toMap(),
       );
       var response = request.data['data'];
@@ -57,7 +61,7 @@ class InspectionRepository extends InspectionRepositoryAbstract {
   Future<Either<Exception, bool>> delete(int id) async {
     try {
       var request = await _client.delete(
-        '/inspection',
+        '/rent',
         queryParameters: {'id': id},
       );
       var response = request.data['data'];
@@ -76,13 +80,13 @@ class InspectionRepository extends InspectionRepositoryAbstract {
   }
 
   @override
-  Future<Either<Exception, bool>> update(Inspection object) async {
+  Future<Either<Exception, bool>> update(Rent object) async {
     try {
       object.client = null;
       object.employee = null;
       object.vehicle = null;
       var request = await _client.put(
-        '/inspection',
+        '/rent',
         data: object.toMap(),
       );
       var response = request.data['data'];
@@ -101,12 +105,12 @@ class InspectionRepository extends InspectionRepositoryAbstract {
   }
 
   @override
-  Future<Either<Exception, bool>> checkVehicleAvailability(
-      CheckVehicleAvailabilityDto object) async {
+  Future<Either<Exception, bool>> isAvailableForRent(
+      IsAvailableForRentDto dto) async {
     try {
       var request = await _client.get(
-        '/inspection/inspected',
-        queryParameters: object.toMap(),
+        '/rent/available',
+        queryParameters: dto.toMap(),
       );
       var response = request.data['data'];
       return Right(response);

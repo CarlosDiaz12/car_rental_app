@@ -4,6 +4,7 @@ import 'package:car_rental_app/ui/common/layout/layout_page_viewmodel.dart';
 import 'package:car_rental_app/ui/employee/pages/list_employee/list_employee_page.dart';
 import 'package:car_rental_app/ui/fuel_type/pages/list_fuel_type/list_fuel_type_page.dart';
 import 'package:car_rental_app/ui/model/pages/list_model/list_model_page.dart';
+import 'package:car_rental_app/ui/rent/pages/list_rent/list_rent_page.dart';
 import 'package:car_rental_app/ui/vehicle/pages/list_vehicle/list_vehicle_page.dart';
 import 'package:car_rental_app/ui/vehicle_type/pages/list_vehicle_type/list_vehicle_type_page.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -51,6 +52,10 @@ class NavigationPage extends StatelessWidget {
             },
             items: [
               PaneItem(
+                icon: Icon(FluentIcons.car),
+                title: Text('Rentas'),
+              ),
+              PaneItem(
                 icon: Icon(FluentIcons.test_add),
                 title: Text('Inspecciones'),
               ),
@@ -91,6 +96,7 @@ class NavigationPage extends StatelessWidget {
           content: NavigationBody(
             index: viewModel.currentIndex,
             children: [
+              ListRentPage(),
               ListInspectionPage(),
               ListVehicleTypePage(),
               ListBrandPage(),

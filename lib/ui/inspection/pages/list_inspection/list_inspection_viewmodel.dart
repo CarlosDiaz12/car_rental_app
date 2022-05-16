@@ -41,11 +41,12 @@ class ListInspectionViewModel extends BaseViewModel {
     'Acciones'
   ];
 
-  ListInspectionViewModel(
-      {required this.repository,
-      required this.clientRepository,
-      required this.employeeRepository,
-      required this.vehicleRepository});
+  ListInspectionViewModel({
+    required this.repository,
+    required this.clientRepository,
+    required this.employeeRepository,
+    required this.vehicleRepository,
+  });
 
   Future<void> loadValuesData() async {
     clearErrors();
