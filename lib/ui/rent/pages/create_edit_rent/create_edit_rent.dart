@@ -50,6 +50,13 @@ class _CreateEditRentState extends State<CreateEditRent> {
     var labelStyle = FluentTheme.of(context).typography.body?.copyWith(
           fontWeight: FontWeight.bold,
         );
+    var daysQuantityController = TextEditingController(
+      text: widget.action == FORM_ACTION.CREATE
+          ? formData.daysQuantity == null
+              ? null
+              : formData.daysQuantity.toString()
+          : widget.data?.daysQuantity.toString(),
+    );
 
     return ContentDialog(
       constraints: BoxConstraints(
@@ -185,6 +192,8 @@ class _CreateEditRentState extends State<CreateEditRent> {
                                 } else {
                                   widget.data?.rentDate = value;
                                 }
+                                _calculateDaysQuantityRent(
+                                    daysQuantityController);
                               },
                             )
                           },
@@ -206,6 +215,8 @@ class _CreateEditRentState extends State<CreateEditRent> {
                                 } else {
                                   widget.data?.returnDate = value;
                                 }
+                                _calculateDaysQuantityRent(
+                                    daysQuantityController);
                               },
                             )
                           },
@@ -245,6 +256,8 @@ class _CreateEditRentState extends State<CreateEditRent> {
                         child: LabeledFieldWidget(
                           label: 'Comentario',
                           child: TextFormBox(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
                             initialValue: widget.action == FORM_ACTION.CREATE
                                 ? formData.comment
                                 : widget.data?.comment,
@@ -269,6 +282,8 @@ class _CreateEditRentState extends State<CreateEditRent> {
                         child: LabeledFieldWidget(
                           label: 'Monto por Dia',
                           child: TextFormBox(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
                             inputFormatters: [
                               ViewUtils.numericInputFormatter()
                             ],
@@ -301,14 +316,13 @@ class _CreateEditRentState extends State<CreateEditRent> {
                         child: LabeledFieldWidget(
                           label: 'Cantidad de Dias',
                           child: TextFormBox(
+                            controller: daysQuantityController,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            readOnly: true,
                             inputFormatters: [
                               ViewUtils.numericInputFormatter()
                             ],
-                            initialValue: widget.action == FORM_ACTION.CREATE
-                                ? formData.daysQuantity == null
-                                    ? null
-                                    : formData.daysQuantity.toString()
-                                : widget.data?.daysQuantity.toString(),
                             onSaved: ((newValue) {
                               if (newValue != null) {
                                 int value = int.parse(newValue);
@@ -425,6 +439,23 @@ class _CreateEditRentState extends State<CreateEditRent> {
         )
       ],
     );
+  }
+
+  _calculateDaysQuantityRent(TextEditingController controller) {
+    var rentDate = (widget.data?.rentDate ?? formData.rentDate)!;
+    var rentDateUtc = DateTime.utc(rentDate.year, rentDate.month, rentDate.day);
+    var returnDate = (widget.data?.returnDate ?? formData.returnDate)!;
+    var returnDateUtc =
+        DateTime.utc(returnDate.year, returnDate.month, returnDate.day);
+    var daysQuantity =
+        (returnDateUtc.difference(rentDateUtc).inHours / 24).round();
+
+    if (widget.action == FORM_ACTION.CREATE) {
+      formData.daysQuantity = daysQuantity;
+    } else {
+      widget.data?.daysQuantity = daysQuantity;
+    }
+    controller.text = daysQuantity.toString();
   }
 
   void _showValidationMessage(BuildContext context, String message) {

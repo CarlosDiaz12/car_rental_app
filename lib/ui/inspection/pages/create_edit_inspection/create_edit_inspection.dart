@@ -369,42 +369,6 @@ class _CreateEditInspectionState extends State<CreateEditInspection> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      /*
-                      SizedBox(
-                        width: 200,
-                        child: LabeledFieldWidget(
-                          label: 'Tipo Inspeccion',
-                          child: Combobox<int>(
-                            placeholder: Text('Selecciona'),
-                            isExpanded: true,
-                            items: InspectionType.values
-                                .map((e) => ComboboxItem<int>(
-                                      value: e.index,
-                                      child: Text(
-                                          ViewUtils.getInspectionTypeText(e)),
-                                    ))
-                                .toList(),
-                            value: widget.action == FORM_ACTION.CREATE
-                                ? formData.inspectionType?.index
-                                : widget.data?.inspectionType?.index,
-                            onChanged: (value) {
-                              setState(() {
-                                if (value != null) {
-                                  if (widget.action == FORM_ACTION.CREATE) {
-                                    formData.inspectionType =
-                                        InspectionType.values[value];
-                                  } else {
-                                    widget.data?.inspectionType =
-                                        InspectionType.values[value];
-                                  }
-                                }
-                              });
-                            },
-                          ),
-                        ),
-                      ),                  
-                      SizedBox(width: 15),
-                      */
                       SizedBox(
                         width: 200,
                         child: DatePicker(
