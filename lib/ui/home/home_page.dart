@@ -12,15 +12,15 @@ class HomePage extends StatelessWidget {
       content: Container(
         height: MediaQuery.of(context).size.height,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Spacer(),
             Consumer<UserStateViewModel>(
               builder: (context, user, _) => Text(
                 'Bienvenid@ ${user.currentUser?.name ?? 'Desconocido'}',
                 style: FluentTheme.of(context).typography.title,
               ),
             ),
-            SizedBox(height: 40),
+            SizedBox(height: 15),
             SizedBox(
               width: 300,
               height: 40,
@@ -40,6 +40,7 @@ class HomePage extends StatelessWidget {
                 },
               ),
             ),
+            Spacer(flex: 4),
           ],
         ),
       ),
