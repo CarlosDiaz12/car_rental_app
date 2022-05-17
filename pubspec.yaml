@@ -40,7 +40,10 @@ dependencies:
   auto_route: ^3.2.4
   # mvvm
   stacked: ^2.3.0
-
+  # utils
+  syncfusion_flutter_xlsio: ^20.1.55-beta
+  path_provider: ^2.0.10
+  open_file: ^3.2.1
   # ui
   fluent_ui: ^3.11.1
   mask_text_input_formatter: ^2.3.0

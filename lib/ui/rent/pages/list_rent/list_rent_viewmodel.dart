@@ -1,8 +1,13 @@
+import 'dart:io';
+
+import 'package:car_rental_app/core/util/report_util.dart';
 import 'package:car_rental_app/domain/dto/is_available_for_rent_dto.dart';
 import 'package:car_rental_app/domain/dto/rent_filter_dto.dart';
 import 'package:car_rental_app/domain/models/rent.dart';
 import 'package:car_rental_app/domain/repository/inspection_repository.dart';
 import 'package:car_rental_app/domain/repository/rent_repository_abstract.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../../../domain/dto/check_vehicle_availability_dto.dart';
@@ -59,6 +64,21 @@ class ListRentViewModel extends BaseViewModel {
     required this.vehicleRepository,
     required this.inspectionRepository,
   });
+
+  void exportData() async {
+    // generate workbook
+    var data = _filteredList;
+    var workBook = ReportUtil.createRentExcelFile(data!);
+    // save to device
+    List<int> bytes = workBook.saveAsStream();
+    workBook.dispose();
+    final String path = (await getApplicationSupportDirectory()).path;
+    final String fileName =
+        '$path\\report-${DateTime.now().millisecondsSinceEpoch}.xlsx';
+    final File file = File(fileName);
+    file.writeAsBytes(bytes, flush: true);
+    OpenFile.open(fileName);
+  }
 
   void setRentDate(DateTime date) {
     filters.rentDate = date;

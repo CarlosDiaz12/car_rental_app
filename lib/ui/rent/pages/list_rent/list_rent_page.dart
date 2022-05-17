@@ -102,7 +102,7 @@ class ListRentPage extends StatelessWidget {
                               SizedBox(width: 20),
                               LabeledFieldWidget(
                                 label: '',
-                                child: Button(
+                                child: fluent.FilledButton(
                                   onPressed: viewModel.filterList,
                                   child: Text('Filtrar'),
                                 ),
@@ -120,12 +120,21 @@ class ListRentPage extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: 10),
-                        Button(
-                          onPressed: () async {
-                            manageCreateEdit(
-                                context, FORM_ACTION.CREATE, viewModel, null);
-                          },
-                          child: Text('Agregar'),
+                        Row(
+                          children: [
+                            Button(
+                              onPressed: () async {
+                                manageCreateEdit(context, FORM_ACTION.CREATE,
+                                    viewModel, null);
+                              },
+                              child: Text('Agregar'),
+                            ),
+                            SizedBox(width: 10),
+                            fluent.FilledButton(
+                              onPressed: viewModel.exportData,
+                              child: Text('Exportar'),
+                            ),
+                          ],
                         ),
                         SizedBox(height: 10),
                         TableWidget(
