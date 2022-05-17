@@ -1,6 +1,9 @@
+import 'package:car_rental_app/core/error/exceptions.dart';
+import 'package:car_rental_app/domain/repository/auth_repository_abstract.dart';
 import 'package:car_rental_app/ui/auth/pages/login/login_viewmodel.dart';
 import 'package:car_rental_app/ui/common/widgets/labeled_flied_widget.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
 
 class LoginPage extends StatelessWidget {
@@ -9,11 +12,10 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<LoginViewModel>.reactive(
-        viewModelBuilder: () => LoginViewModel(),
+        viewModelBuilder: () => LoginViewModel(
+              authRepository: Provider.of<AuthRepositoryAbstract>(context),
+            ),
         builder: (context, viewModel, _) {
-          final formKey = GlobalKey<FormState>();
-          final userNameCtrl = TextEditingController();
-          final passwordCtrl = TextEditingController();
           return ScaffoldPage(
             content: Container(
               width: MediaQuery.of(context).size.width,
@@ -37,7 +39,7 @@ class LoginPage extends StatelessWidget {
                           SizedBox(height: 40),
                           Flexible(
                             child: Form(
-                              key: formKey,
+                              key: viewModel.formKey,
                               child: Column(
                                 children: [
                                   SizedBox(
@@ -45,7 +47,7 @@ class LoginPage extends StatelessWidget {
                                     child: LabeledFieldWidget(
                                       label: 'Usuario',
                                       child: TextFormBox(
-                                        controller: userNameCtrl,
+                                        controller: viewModel.userNameCtrl,
                                         validator: (String? text) {
                                           if (text == null || text.isEmpty)
                                             return 'Requerido';
@@ -60,7 +62,7 @@ class LoginPage extends StatelessWidget {
                                     child: LabeledFieldWidget(
                                       label: 'Contraseña',
                                       child: TextFormBox(
-                                        controller: passwordCtrl,
+                                        controller: viewModel.passwordCtrl,
                                         obscureText: true,
                                         validator: (String? text) {
                                           if (text == null || text.isEmpty)
@@ -78,14 +80,34 @@ class LoginPage extends StatelessWidget {
                             width: 300,
                             child: FilledButton(
                               child: Text('Ingresar'),
-                              onPressed: () {
-                                if (formKey.currentState!.validate()) {
-                                  var userName = userNameCtrl.text;
-                                  var password = passwordCtrl.text;
-                                }
-                              },
+                              onPressed: viewModel.isBusy
+                                  ? null
+                                  : () async {
+                                      if (viewModel.formKey.currentState!
+                                          .validate()) {
+                                        var userName =
+                                            viewModel.userNameCtrl.text;
+                                        var password =
+                                            viewModel.passwordCtrl.text;
+                                        var response = await viewModel.login(
+                                            userName, password);
+                                        if (response != null) {
+                                          // go to next page
+                                        } else {
+                                          var error = viewModel.modelError
+                                              as BaseException;
+                                          _showValidationMessage(
+                                              context, error.cause);
+                                        }
+                                      }
+                                    },
                             ),
                           ),
+                          if (viewModel.isBusy)
+                            Container(
+                              width: 300,
+                              child: ProgressBar(),
+                            ),
                           Spacer(),
                         ],
                       ),
@@ -96,5 +118,25 @@ class LoginPage extends StatelessWidget {
             ),
           );
         });
+  }
+
+  void _showValidationMessage(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return ContentDialog(
+          title: Text('Informacion'),
+          content: Text(message),
+          actions: [
+            Button(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
+          ],
+        );
+      },
+    );
   }
 }
