@@ -53,43 +53,41 @@ class LoginPage extends StatelessWidget {
                           Image.asset('assets/images/vehicle_logo.png',
                               width: 300),
                           SizedBox(height: 40),
-                          Flexible(
-                            child: Form(
-                              key: viewModel.formKey,
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    width: 300,
-                                    child: LabeledFieldWidget(
-                                      label: 'Usuario',
-                                      child: TextFormBox(
-                                        controller: viewModel.userNameCtrl,
-                                        validator: (String? text) {
-                                          if (text == null || text.isEmpty)
-                                            return 'Requerido';
-                                          return null;
-                                        },
-                                      ),
+                          Form(
+                            key: viewModel.formKey,
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  width: 300,
+                                  child: LabeledFieldWidget(
+                                    label: 'Usuario',
+                                    child: TextFormBox(
+                                      controller: viewModel.userNameCtrl,
+                                      validator: (String? text) {
+                                        if (text == null || text.isEmpty)
+                                          return 'Requerido';
+                                        return null;
+                                      },
                                     ),
                                   ),
-                                  SizedBox(height: 20),
-                                  SizedBox(
-                                    width: 300,
-                                    child: LabeledFieldWidget(
-                                      label: 'Contraseña',
-                                      child: TextFormBox(
-                                        controller: viewModel.passwordCtrl,
-                                        obscureText: true,
-                                        validator: (String? text) {
-                                          if (text == null || text.isEmpty)
-                                            return 'Requerido';
-                                          return null;
-                                        },
-                                      ),
+                                ),
+                                SizedBox(height: 20),
+                                SizedBox(
+                                  width: 300,
+                                  child: LabeledFieldWidget(
+                                    label: 'Contraseña',
+                                    child: TextFormBox(
+                                      controller: viewModel.passwordCtrl,
+                                      obscureText: true,
+                                      validator: (String? text) {
+                                        if (text == null || text.isEmpty)
+                                          return 'Requerido';
+                                        return null;
+                                      },
                                     ),
-                                  )
-                                ],
-                              ),
+                                  ),
+                                )
+                              ],
                             ),
                           ),
                           SizedBox(

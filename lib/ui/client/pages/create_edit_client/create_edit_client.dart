@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:car_rental_app/domain/enums/tax_payer_type.dart';
 import 'package:car_rental_app/domain/models/client.dart';
+import 'package:car_rental_app/ui/common/widgets/labeled_flied_widget.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 import '../../../../domain/enums/form_action_enum.dart';
@@ -47,70 +48,82 @@ class _CreateEditClientState extends State<CreateEditClient> {
                   children: [
                     SizedBox(
                       width: 200,
-                      child: TextFormBox(
-                        initialValue: widget.action == FORM_ACTION.CREATE
-                            ? formData.name
-                            : widget.data?.name,
-                        onSaved: ((newValue) {
-                          if (widget.action == FORM_ACTION.CREATE) {
-                            formData.name = newValue;
-                          } else {
-                            widget.data?.name = newValue;
-                          }
-                        }),
-                        placeholder: 'Nombre',
-                        validator: (String? text) {
-                          if (text == null || text.isEmpty) return 'Requerido';
-                          return null;
-                        },
+                      child: LabeledFieldWidget(
+                        label: 'Nombre',
+                        child: TextFormBox(
+                          initialValue: widget.action == FORM_ACTION.CREATE
+                              ? formData.name
+                              : widget.data?.name,
+                          onSaved: ((newValue) {
+                            if (widget.action == FORM_ACTION.CREATE) {
+                              formData.name = newValue;
+                            } else {
+                              widget.data?.name = newValue;
+                            }
+                          }),
+                          placeholder: 'Nombre',
+                          validator: (String? text) {
+                            if (text == null || text.isEmpty)
+                              return 'Requerido';
+                            return null;
+                          },
+                        ),
                       ),
                     ),
                     SizedBox(
                       width: 200,
-                      child: TextFormBox(
-                        inputFormatters: [
-                          ViewUtils.numericInputFormatter(),
-                          ViewUtils.getIdentificationNumberMask()
-                        ],
-                        initialValue: widget.action == FORM_ACTION.CREATE
-                            ? formData.identificationCard
-                            : widget.data?.identificationCard,
-                        onSaved: ((newValue) {
-                          if (widget.action == FORM_ACTION.CREATE) {
-                            formData.identificationCard = newValue;
-                          } else {
-                            widget.data?.identificationCard = newValue;
-                          }
-                        }),
-                        placeholder: 'Cedula',
-                        validator: (String? text) {
-                          print(text?.replaceAll('-', '').length);
-                          if (text == null || text.isEmpty) return 'Requerido';
-                          if ((text.replaceAll('-', '').length < 11) ||
-                              !ViewUtils.isValidIdNumber(text))
-                            return 'Cedula no valida';
-                          return null;
-                        },
+                      child: LabeledFieldWidget(
+                        label: 'Cedula',
+                        child: TextFormBox(
+                          inputFormatters: [
+                            ViewUtils.numericInputFormatter(),
+                            ViewUtils.getIdentificationNumberMask()
+                          ],
+                          initialValue: widget.action == FORM_ACTION.CREATE
+                              ? formData.identificationCard
+                              : widget.data?.identificationCard,
+                          onSaved: ((newValue) {
+                            if (widget.action == FORM_ACTION.CREATE) {
+                              formData.identificationCard = newValue;
+                            } else {
+                              widget.data?.identificationCard = newValue;
+                            }
+                          }),
+                          placeholder: 'Cedula',
+                          validator: (String? text) {
+                            print(text?.replaceAll('-', '').length);
+                            if (text == null || text.isEmpty)
+                              return 'Requerido';
+                            if ((text.replaceAll('-', '').length < 11) ||
+                                !ViewUtils.isValidIdNumber(text))
+                              return 'Cedula no valida';
+                            return null;
+                          },
+                        ),
                       ),
                     ),
                     SizedBox(
                       width: 200,
-                      child: TextFormBox(
-                        initialValue: widget.action == FORM_ACTION.CREATE
-                            ? formData.creditCardNumber
-                            : widget.data?.creditCardNumber,
-                        onSaved: ((newValue) {
-                          if (widget.action == FORM_ACTION.CREATE) {
-                            formData.creditCardNumber = newValue;
-                          } else {
-                            widget.data?.creditCardNumber = newValue;
-                          }
-                        }),
-                        placeholder: 'No. Tarjeta CR',
-                        validator: (String? text) {
-                          if (text == null || text.isEmpty) return 'Requerido';
-                          return null;
-                        },
+                      child: LabeledFieldWidget(
+                        label: 'No. Tarjeta CR',
+                        child: TextFormBox(
+                          initialValue: widget.action == FORM_ACTION.CREATE
+                              ? formData.creditCardNumber
+                              : widget.data?.creditCardNumber,
+                          onSaved: ((newValue) {
+                            if (widget.action == FORM_ACTION.CREATE) {
+                              formData.creditCardNumber = newValue;
+                            } else {
+                              widget.data?.creditCardNumber = newValue;
+                            }
+                          }),
+                          placeholder: 'No. Tarjeta CR',
+                          validator: (String? text) {
+                            if (text == null || text.isEmpty)
+                              return 'Requerido';
+                            return null;
+                          },
+                        ),
                       ),
                     ),
                   ],
@@ -122,58 +135,64 @@ class _CreateEditClientState extends State<CreateEditClient> {
                   children: [
                     SizedBox(
                       width: 200,
-                      child: TextFormBox(
-                        inputFormatters: [ViewUtils.numericInputFormatter()],
-                        initialValue: widget.action == FORM_ACTION.CREATE
-                            ? formData.creditLimit == null
-                                ? null
-                                : formData.creditLimit.toString()
-                            : widget.data?.creditLimit.toString(),
-                        onSaved: ((newValue) {
-                          if (newValue != null) {
-                            double value = double.parse(newValue);
-                            if (widget.action == FORM_ACTION.CREATE) {
-                              formData.creditLimit = value;
-                            } else {
-                              widget.data?.creditLimit = value;
+                      child: LabeledFieldWidget(
+                        label: 'Limite Credito',
+                        child: TextFormBox(
+                          inputFormatters: [ViewUtils.numericInputFormatter()],
+                          initialValue: widget.action == FORM_ACTION.CREATE
+                              ? formData.creditLimit == null
+                                  ? null
+                                  : formData.creditLimit.toString()
+                              : widget.data?.creditLimit.toString(),
+                          onSaved: ((newValue) {
+                            if (newValue != null) {
+                              double value = double.parse(newValue);
+                              if (widget.action == FORM_ACTION.CREATE) {
+                                formData.creditLimit = value;
+                              } else {
+                                widget.data?.creditLimit = value;
+                              }
                             }
-                          }
-                        }),
-                        placeholder: 'Limite Credito',
-                        validator: (String? text) {
-                          if (text == null || text.isEmpty || text == '0')
-                            return 'Requerido';
-                          return null;
-                        },
+                          }),
+                          placeholder: 'Limite Credito',
+                          validator: (String? text) {
+                            if (text == null || text.isEmpty || text == '0')
+                              return 'Requerido';
+                            return null;
+                          },
+                        ),
                       ),
                     ),
                     SizedBox(
                       width: 200,
-                      child: Combobox<int>(
-                        placeholder: Text('Tipo Persona'),
-                        isExpanded: true,
-                        items: TaxPayerType.values
-                            .map((e) => ComboboxItem<int>(
-                                  value: e.index,
-                                  child: Text(ViewUtils.getTaxPayerText(e)),
-                                ))
-                            .toList(),
-                        value: widget.action == FORM_ACTION.CREATE
-                            ? formData.taxPayerType?.index
-                            : widget.data?.taxPayerType?.index,
-                        onChanged: (value) {
-                          setState(() {
-                            if (value != null) {
-                              if (widget.action == FORM_ACTION.CREATE) {
-                                formData.taxPayerType =
-                                    TaxPayerType.values[value];
-                              } else {
-                                widget.data?.taxPayerType =
-                                    TaxPayerType.values[value];
+                      child: LabeledFieldWidget(
+                        label: 'Tipo Persona',
+                        child: Combobox<int>(
+                          placeholder: Text('Tipo Persona'),
+                          isExpanded: true,
+                          items: TaxPayerType.values
+                              .map((e) => ComboboxItem<int>(
+                                    value: e.index,
+                                    child: Text(ViewUtils.getTaxPayerText(e)),
+                                  ))
+                              .toList(),
+                          value: widget.action == FORM_ACTION.CREATE
+                              ? formData.taxPayerType?.index
+                              : widget.data?.taxPayerType?.index,
+                          onChanged: (value) {
+                            setState(() {
+                              if (value != null) {
+                                if (widget.action == FORM_ACTION.CREATE) {
+                                  formData.taxPayerType =
+                                      TaxPayerType.values[value];
+                                } else {
+                                  widget.data?.taxPayerType =
+                                      TaxPayerType.values[value];
+                                }
                               }
-                            }
-                          });
-                        },
+                            });
+                          },
+                        ),
                       ),
                     ),
                     SizedBox(
