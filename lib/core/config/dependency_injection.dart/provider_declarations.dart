@@ -1,3 +1,4 @@
+import 'package:car_rental_app/data/repository/auth_repository.dart';
 import 'package:car_rental_app/data/repository/brand_repository.dart';
 import 'package:car_rental_app/data/repository/employee_repository.dart';
 import 'package:car_rental_app/data/repository/fuel_type_repository.dart';
@@ -5,6 +6,7 @@ import 'package:car_rental_app/data/repository/inspection_repository.dart';
 import 'package:car_rental_app/data/repository/model_repository.dart';
 import 'package:car_rental_app/data/repository/rent_repository.dart';
 import 'package:car_rental_app/data/repository/vehicle_repository.dart';
+import 'package:car_rental_app/domain/repository/auth_repository_abstract.dart';
 import 'package:car_rental_app/domain/repository/brand_repository_abstract.dart';
 import 'package:car_rental_app/domain/repository/client_repository_abstract.dart';
 import 'package:car_rental_app/domain/repository/employee_respository_abstract.dart';
@@ -14,6 +16,7 @@ import 'package:car_rental_app/domain/repository/model_repository_abstract.dart'
 import 'package:car_rental_app/domain/repository/rent_repository_abstract.dart';
 import 'package:car_rental_app/domain/repository/vehicle_repository_abstract.dart';
 import 'package:car_rental_app/domain/repository/vehicle_type_respository_abstract.dart';
+import 'package:car_rental_app/ui/common/viewmodels/user_state_viewmodel.dart';
 import 'package:dio/dio.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
@@ -85,6 +88,11 @@ class DependencyInjection {
         client: dioClient,
       ),
     ),
+    ProxyProvider<Dio, AuthRepositoryAbstract>(
+      update: (context, dioClient, _) => AuthRepository(
+        client: dioClient,
+      ),
+    ),
     /*Provider.value(value: ExampleRepository),*/
 
     /*
@@ -96,8 +104,9 @@ class DependencyInjection {
     ),
      */
   ];
-/*
+
   static final List<SingleChildWidget> _uiProviders = [
+    ChangeNotifierProvider(create: (context) => UserStateViewModel())
     /*
     example:
         ProxyProvider<Dio, ExampleService>(
@@ -107,9 +116,13 @@ class DependencyInjection {
     ),
      */
   ];
-*/
+
   static Future<void> setup() async {
-    _providers = [..._networkProviders, ..._repositoryProviders];
+    _providers = [
+      ..._networkProviders,
+      ..._repositoryProviders,
+      ..._uiProviders
+    ];
   }
 
   static Dio _initHttpClient() {

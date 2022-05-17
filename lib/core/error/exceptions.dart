@@ -9,7 +9,8 @@ class ServerException extends BaseException {
 }
 
 class LoginFailedException extends BaseException {
-  LoginFailedException(String message) : super(message);
+  LoginFailedException([String message = 'Usuario o contrasena incorrectos.'])
+      : super(message);
 }
 
 class NotFoundException extends BaseException {

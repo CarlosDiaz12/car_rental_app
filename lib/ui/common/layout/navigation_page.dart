@@ -1,13 +1,18 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:car_rental_app/core/config/routing/routes.gr.dart';
 import 'package:car_rental_app/ui/brand/pages/list_brand/list_brand_page.dart';
 import 'package:car_rental_app/ui/client/pages/list_client/list_client_page.dart';
 import 'package:car_rental_app/ui/common/layout/layout_page_viewmodel.dart';
+import 'package:car_rental_app/ui/common/viewmodels/user_state_viewmodel.dart';
 import 'package:car_rental_app/ui/employee/pages/list_employee/list_employee_page.dart';
 import 'package:car_rental_app/ui/fuel_type/pages/list_fuel_type/list_fuel_type_page.dart';
+import 'package:car_rental_app/ui/home/home_page.dart';
 import 'package:car_rental_app/ui/model/pages/list_model/list_model_page.dart';
 import 'package:car_rental_app/ui/rent/pages/list_rent/list_rent_page.dart';
 import 'package:car_rental_app/ui/vehicle/pages/list_vehicle/list_vehicle_page.dart';
 import 'package:car_rental_app/ui/vehicle_type/pages/list_vehicle_type/list_vehicle_type_page.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../inspection/pages/list_inspection/list_inspection_page.dart';
@@ -25,16 +30,18 @@ class NavigationPage extends StatelessWidget {
             automaticallyImplyLeading: false,
             title: Padding(
               padding: EdgeInsets.only(left: 12),
-              child: Row(children: [
-                Icon(FluentIcons.car, size: 24),
-                SizedBox(width: 10),
-                Text(
-                  'Car Rental System',
-                  style: FluentTheme.of(context).typography.title!.copyWith(
-                        fontSize: 24,
-                      ),
-                ),
-              ]),
+              child: Row(
+                children: [
+                  Icon(FluentIcons.car, size: 24),
+                  SizedBox(width: 10),
+                  Text(
+                    'Car Rental System',
+                    style: FluentTheme.of(context).typography.title!.copyWith(
+                          fontSize: 24,
+                        ),
+                  ),
+                ],
+              ),
             ),
           ),
           pane: NavigationPane(
@@ -46,11 +53,26 @@ class NavigationPage extends StatelessWidget {
               ),
             ),
             selected: viewModel.currentIndex,
-            displayMode: PaneDisplayMode.auto,
+            displayMode: PaneDisplayMode.compact,
             onChanged: (int index) {
               viewModel.changePageIndex(index);
             },
+            footerItems: [
+              PaneItemAction(
+                onTap: () {
+                  Provider.of<UserStateViewModel>(context, listen: false)
+                      .removeCurrentUser();
+                  AutoRouter.of(context).replace(LoginRoute());
+                },
+                icon: Icon(FluentIcons.close_pane),
+                title: Text('Cerrar Sesion'),
+              ),
+            ],
             items: [
+              PaneItem(
+                icon: Icon(FluentIcons.home),
+                title: Text('Inicio'),
+              ),
               PaneItem(
                 icon: Icon(FluentIcons.car),
                 title: Text('Rentas'),
@@ -96,6 +118,7 @@ class NavigationPage extends StatelessWidget {
           content: NavigationBody(
             index: viewModel.currentIndex,
             children: [
+              HomePage(),
               ListRentPage(),
               ListInspectionPage(),
               ListVehicleTypePage(),
