@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
 import '../../../../domain/enums/form_action_enum.dart';
 import '../../../common/view_utils.dart';
+import '../../../common/widgets/error_banner.dart';
 import '../../../common/widgets/table_widget.dart';
 import '../create_edit_inspection/create_edit_inspection.dart';
 
@@ -46,71 +47,78 @@ class ListInspectionPage extends StatelessWidget {
             content: SingleChildScrollView(
               child: viewModel.isBusy
                   ? Center(child: ProgressRing())
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Button(
-                          onPressed: () async {
-                            manageCreateEdit(
-                                context, FORM_ACTION.CREATE, viewModel, null);
-                          },
-                          child: Text('Agregar'),
-                        ),
-                        SizedBox(height: 10),
-                        TableWidget(
-                          columnWidth: 20,
-                          columnNames: viewModel.columnNames,
-                          rows: [
-                            ...viewModel.list!.map(
-                              (e) => DataRow(
-                                cells: [
-                                  ViewUtils.buildTableCell(
-                                    e.id,
-                                    onTap: () {
-                                      manageCreateEdit(context,
-                                          FORM_ACTION.UPDATE, viewModel, e);
-                                    },
+                  : viewModel.hasError
+                      ? ErrorBanner(
+                          exception: viewModel.modelError,
+                          callBack: viewModel.loadData)
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Button(
+                              onPressed: () async {
+                                manageCreateEdit(context, FORM_ACTION.CREATE,
+                                    viewModel, null);
+                              },
+                              child: Text('Agregar'),
+                            ),
+                            SizedBox(height: 10),
+                            TableWidget(
+                              columnWidth: 20,
+                              columnNames: viewModel.columnNames,
+                              rows: [
+                                ...viewModel.list!.map(
+                                  (e) => DataRow(
+                                    cells: [
+                                      ViewUtils.buildTableCell(
+                                        e.id,
+                                        onTap: () {
+                                          manageCreateEdit(context,
+                                              FORM_ACTION.UPDATE, viewModel, e);
+                                        },
+                                      ),
+                                      ViewUtils.buildTableCell(
+                                          ViewUtils.formatDate(
+                                              e.inspectionDate!)),
+                                      ViewUtils.buildTableCell(
+                                          e.employee?.name),
+                                      ViewUtils.buildTableCell(
+                                          '${e.vehicle?.brand?.description} - ${e.vehicle?.model?.description}'),
+                                      ViewUtils.buildTableCell(e.client?.name),
+                                      ViewUtils.buildTableCell(
+                                          e.hasScratches! ? 'Si' : 'No'),
+                                      ViewUtils.buildTableCell(
+                                          ViewUtils.getFuelQuantityText(
+                                              e.fuelQuantity!)),
+                                      ViewUtils.buildTableCell(
+                                          e.hasSpareTire! ? 'Si' : 'No'),
+                                      ViewUtils.buildTableCell(
+                                          e.hasManualJack! ? 'Si' : 'No'),
+                                      ViewUtils.buildTableCell(
+                                          e.hasGlassBreakage! ? 'Si' : 'No'),
+                                      ViewUtils.buildTableCell(
+                                          (e.status == true)
+                                              ? 'Activo'
+                                              : 'Inactivo'),
+                                      ViewUtils.buildActionTableCell(
+                                        child: Icon(fluent.FluentIcons.delete),
+                                        onTap: () async {
+                                          var delete =
+                                              await _showConfirmDialog(context);
+                                          if (delete) {
+                                            _showLoading(context);
+                                            await viewModel.delete(e.id!);
+                                            AutoRouter.of(context).pop();
+                                            await viewModel.loadData();
+                                          }
+                                        },
+                                      )
+                                    ],
                                   ),
-                                  ViewUtils.buildTableCell(
-                                      ViewUtils.formatDate(e.inspectionDate!)),
-                                  ViewUtils.buildTableCell(e.employee?.name),
-                                  ViewUtils.buildTableCell(
-                                      '${e.vehicle?.brand?.description} - ${e.vehicle?.model?.description}'),
-                                  ViewUtils.buildTableCell(e.client?.name),
-                                  ViewUtils.buildTableCell(
-                                      e.hasScratches! ? 'Si' : 'No'),
-                                  ViewUtils.buildTableCell(
-                                      ViewUtils.getFuelQuantityText(
-                                          e.fuelQuantity!)),
-                                  ViewUtils.buildTableCell(
-                                      e.hasSpareTire! ? 'Si' : 'No'),
-                                  ViewUtils.buildTableCell(
-                                      e.hasManualJack! ? 'Si' : 'No'),
-                                  ViewUtils.buildTableCell(
-                                      e.hasGlassBreakage! ? 'Si' : 'No'),
-                                  ViewUtils.buildTableCell((e.status == true)
-                                      ? 'Activo'
-                                      : 'Inactivo'),
-                                  ViewUtils.buildActionTableCell(
-                                    child: Icon(fluent.FluentIcons.delete),
-                                    onTap: () async {
-                                      var delete =
-                                          await _showConfirmDialog(context);
-                                      if (delete) {
-                                        _showLoading(context);
-                                        await viewModel.delete(e.id!);
-                                        AutoRouter.of(context).pop();
-                                        await viewModel.loadData();
-                                      }
-                                    },
-                                  )
-                                ],
-                              ),
+                                )
+                              ],
                             )
                           ],
-                        )
-                      ],
-                    ),
+                        ),
             ),
           ),
         );

@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:car_rental_app/domain/models/brand.dart';
 import 'package:car_rental_app/ui/brand/pages/list_brand/list_brand_viewmodel.dart';
+import 'package:car_rental_app/ui/common/widgets/error_banner.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/material.dart';
@@ -38,54 +39,59 @@ class ListBrandPage extends StatelessWidget {
             content: SingleChildScrollView(
               child: viewModel.busy(viewModel.list)
                   ? Center(child: ProgressRing())
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Button(
-                          onPressed: () async {
-                            manageCreateEdit(
-                                context, FORM_ACTION.CREATE, viewModel, null);
-                          },
-                          child: Text('Agregar'),
-                        ),
-                        SizedBox(height: 10),
-                        TableWidget(
-                          columnNames: viewModel.columnNames,
-                          rows: [
-                            ...viewModel.list!.map(
-                              (e) => DataRow(
-                                cells: [
-                                  ViewUtils.buildTableCell(
-                                    e.id,
-                                    onTap: () {
-                                      manageCreateEdit(context,
-                                          FORM_ACTION.UPDATE, viewModel, e);
-                                    },
+                  : viewModel.hasError
+                      ? ErrorBanner(
+                          exception: viewModel.modelError,
+                          callBack: viewModel.loadData)
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Button(
+                              onPressed: () async {
+                                manageCreateEdit(context, FORM_ACTION.CREATE,
+                                    viewModel, null);
+                              },
+                              child: Text('Agregar'),
+                            ),
+                            SizedBox(height: 10),
+                            TableWidget(
+                              columnNames: viewModel.columnNames,
+                              rows: [
+                                ...viewModel.list!.map(
+                                  (e) => DataRow(
+                                    cells: [
+                                      ViewUtils.buildTableCell(
+                                        e.id,
+                                        onTap: () {
+                                          manageCreateEdit(context,
+                                              FORM_ACTION.UPDATE, viewModel, e);
+                                        },
+                                      ),
+                                      ViewUtils.buildTableCell(e.description),
+                                      ViewUtils.buildTableCell(
+                                          (e.status == true)
+                                              ? 'Activo'
+                                              : 'Inactivo'),
+                                      ViewUtils.buildActionTableCell(
+                                        child: Icon(fluent.FluentIcons.delete),
+                                        onTap: () async {
+                                          var delete =
+                                              await _showConfirmDialog(context);
+                                          if (delete) {
+                                            _showLoading(context);
+                                            await viewModel.delete(e.id!);
+                                            AutoRouter.of(context).pop();
+                                            await viewModel.loadData();
+                                          }
+                                        },
+                                      )
+                                    ],
                                   ),
-                                  ViewUtils.buildTableCell(e.description),
-                                  ViewUtils.buildTableCell((e.status == true)
-                                      ? 'Activo'
-                                      : 'Inactivo'),
-                                  ViewUtils.buildActionTableCell(
-                                    child: Icon(fluent.FluentIcons.delete),
-                                    onTap: () async {
-                                      var delete =
-                                          await _showConfirmDialog(context);
-                                      if (delete) {
-                                        _showLoading(context);
-                                        await viewModel.delete(e.id!);
-                                        AutoRouter.of(context).pop();
-                                        await viewModel.loadData();
-                                      }
-                                    },
-                                  )
-                                ],
-                              ),
+                                )
+                              ],
                             )
                           ],
-                        )
-                      ],
-                    ),
+                        ),
             ),
           ),
         );

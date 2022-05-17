@@ -15,6 +15,7 @@ import '../../../../domain/repository/client_repository_abstract.dart';
 import '../../../../domain/repository/employee_respository_abstract.dart';
 import '../../../../domain/repository/vehicle_repository_abstract.dart';
 import '../../../common/view_utils.dart';
+import '../../../common/widgets/error_banner.dart';
 import '../../../common/widgets/labeled_flied_widget.dart';
 import '../../../common/widgets/table_widget.dart';
 
@@ -53,137 +54,143 @@ class ListRentPage extends StatelessWidget {
             content: SingleChildScrollView(
               child: viewModel.isBusy
                   ? Center(child: ProgressRing())
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        fluent.Card(
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                width: 200,
-                                child: LabeledFieldWidget(
-                                  label: 'Cliente',
-                                  child: TextFormBox(
-                                    placeholder: 'Cliente',
-                                    onChanged: (value) {
-                                      viewModel.filters.client = value;
-                                    },
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 20),
-                              SizedBox(
-                                width: 200,
-                                child: LabeledFieldWidget(
-                                  label: 'Vehiculo',
-                                  child: TextFormBox(
-                                    placeholder: 'Vehiculo',
-                                    onChanged: (value) {
-                                      viewModel.filters.vehicle = value;
-                                    },
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 20),
-                              SizedBox(
-                                width: 200,
-                                child: DatePicker(
-                                  selected: viewModel.filters.rentDate!,
-                                  headerStyle: labelStyle,
-                                  header: 'Fecha Renta',
-                                  onChanged: (value) {
-                                    viewModel.setRentDate(value);
-                                  },
-                                ),
-                              ),
-                              SizedBox(width: 20),
-                              LabeledFieldWidget(
-                                label: '',
-                                child: fluent.FilledButton(
-                                  onPressed: viewModel.filterList,
-                                  child: Text('Filtrar'),
-                                ),
-                              ),
-                              SizedBox(width: 10),
-                              LabeledFieldWidget(
-                                label: '',
-                                child: Button(
-                                  onPressed: viewModel.loadData,
-                                  child: Text('Limpiar'),
-                                ),
-                              ),
-                              SizedBox(width: 200),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        Row(
+                  : viewModel.hasError
+                      ? ErrorBanner(
+                          exception: viewModel.modelError,
+                          callBack: viewModel.loadData)
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Button(
-                              onPressed: () async {
-                                manageCreateEdit(context, FORM_ACTION.CREATE,
-                                    viewModel, null);
-                              },
-                              child: Text('Agregar'),
-                            ),
-                            SizedBox(width: 10),
-                            fluent.FilledButton(
-                              onPressed: viewModel.exportData,
-                              child: Text('Exportar'),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        TableWidget(
-                          columnWidth: 24,
-                          columnNames: viewModel.columnNames,
-                          rows: [
-                            ...viewModel.filteredList!.map(
-                              (e) => DataRow(
-                                cells: [
-                                  ViewUtils.buildTableCell(
-                                    e.id,
-                                    onTap: () {
-                                      manageCreateEdit(context,
-                                          FORM_ACTION.UPDATE, viewModel, e);
-                                    },
+                            fluent.Card(
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    width: 200,
+                                    child: LabeledFieldWidget(
+                                      label: 'Cliente',
+                                      child: TextFormBox(
+                                        placeholder: 'Cliente',
+                                        onChanged: (value) {
+                                          viewModel.filters.client = value;
+                                        },
+                                      ),
+                                    ),
                                   ),
-                                  ViewUtils.buildTableCell(e.employee?.name),
-                                  ViewUtils.buildTableCell(
-                                      '${e.vehicle?.brand?.description} ${e.vehicle?.model?.description}'),
-                                  ViewUtils.buildTableCell(e.client?.name),
-                                  ViewUtils.buildTableCell(
-                                      ViewUtils.formatDate(e.rentDate!)),
-                                  ViewUtils.buildTableCell(
-                                      ViewUtils.formatDate(e.returnDate!)),
-                                  ViewUtils.buildTableCell(e.ratePerDay),
-                                  ViewUtils.buildTableCell(e.daysQuantity),
-                                  ViewUtils.buildTableCell((e.status == true)
-                                      ? 'Activo'
-                                      : 'Inactivo'),
-                                  ViewUtils.buildActionTableCell(
-                                    child: Icon(fluent.FluentIcons.delete),
-                                    onTap: () async {
-                                      var delete =
-                                          await _showConfirmDialog(context);
-                                      if (delete) {
-                                        _showLoading(context);
-                                        await viewModel.delete(e.id!);
-                                        AutoRouter.of(context).pop();
-                                        await viewModel.loadData();
-                                      }
-                                    },
-                                  )
+                                  SizedBox(width: 20),
+                                  SizedBox(
+                                    width: 200,
+                                    child: LabeledFieldWidget(
+                                      label: 'Vehiculo',
+                                      child: TextFormBox(
+                                        placeholder: 'Vehiculo',
+                                        onChanged: (value) {
+                                          viewModel.filters.vehicle = value;
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 20),
+                                  SizedBox(
+                                    width: 200,
+                                    child: DatePicker(
+                                      selected: viewModel.filters.rentDate!,
+                                      headerStyle: labelStyle,
+                                      header: 'Fecha Renta',
+                                      onChanged: (value) {
+                                        viewModel.setRentDate(value);
+                                      },
+                                    ),
+                                  ),
+                                  SizedBox(width: 20),
+                                  LabeledFieldWidget(
+                                    label: '',
+                                    child: fluent.FilledButton(
+                                      onPressed: viewModel.filterList,
+                                      child: Text('Filtrar'),
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  LabeledFieldWidget(
+                                    label: '',
+                                    child: Button(
+                                      onPressed: viewModel.loadData,
+                                      child: Text('Limpiar'),
+                                    ),
+                                  ),
+                                  SizedBox(width: 200),
                                 ],
                               ),
+                            ),
+                            SizedBox(height: 10),
+                            Row(
+                              children: [
+                                Button(
+                                  onPressed: () async {
+                                    manageCreateEdit(context,
+                                        FORM_ACTION.CREATE, viewModel, null);
+                                  },
+                                  child: Text('Agregar'),
+                                ),
+                                SizedBox(width: 10),
+                                fluent.FilledButton(
+                                  onPressed: viewModel.exportData,
+                                  child: Text('Exportar'),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 10),
+                            TableWidget(
+                              columnWidth: 24,
+                              columnNames: viewModel.columnNames,
+                              rows: [
+                                ...viewModel.filteredList!.map(
+                                  (e) => DataRow(
+                                    cells: [
+                                      ViewUtils.buildTableCell(
+                                        e.id,
+                                        onTap: () {
+                                          manageCreateEdit(context,
+                                              FORM_ACTION.UPDATE, viewModel, e);
+                                        },
+                                      ),
+                                      ViewUtils.buildTableCell(
+                                          e.employee?.name),
+                                      ViewUtils.buildTableCell(
+                                          '${e.vehicle?.brand?.description} ${e.vehicle?.model?.description}'),
+                                      ViewUtils.buildTableCell(e.client?.name),
+                                      ViewUtils.buildTableCell(
+                                          ViewUtils.formatDate(e.rentDate!)),
+                                      ViewUtils.buildTableCell(
+                                          ViewUtils.formatDate(e.returnDate!)),
+                                      ViewUtils.buildTableCell(e.ratePerDay),
+                                      ViewUtils.buildTableCell(e.daysQuantity),
+                                      ViewUtils.buildTableCell(
+                                          (e.status == true)
+                                              ? 'Activo'
+                                              : 'Inactivo'),
+                                      ViewUtils.buildActionTableCell(
+                                        child: Icon(fluent.FluentIcons.delete),
+                                        onTap: () async {
+                                          var delete =
+                                              await _showConfirmDialog(context);
+                                          if (delete) {
+                                            _showLoading(context);
+                                            await viewModel.delete(e.id!);
+                                            AutoRouter.of(context).pop();
+                                            await viewModel.loadData();
+                                          }
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
                             )
                           ],
-                        )
-                      ],
-                    ),
+                        ),
             ),
           ),
         );
