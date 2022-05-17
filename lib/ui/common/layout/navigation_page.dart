@@ -12,6 +12,7 @@ import 'package:car_rental_app/ui/rent/pages/list_rent/list_rent_page.dart';
 import 'package:car_rental_app/ui/vehicle/pages/list_vehicle/list_vehicle_page.dart';
 import 'package:car_rental_app/ui/vehicle_type/pages/list_vehicle_type/list_vehicle_type_page.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
 
@@ -57,28 +58,17 @@ class NavigationPage extends StatelessWidget {
             onChanged: (int index) {
               viewModel.changePageIndex(index);
             },
-            footerItems: [
-              PaneItemAction(
-                onTap: () {
-                  Provider.of<UserStateViewModel>(context, listen: false)
-                      .removeCurrentUser();
-                  AutoRouter.of(context).replace(LoginRoute());
-                },
-                icon: Icon(FluentIcons.close_pane),
-                title: Text('Cerrar Sesion'),
-              ),
-            ],
             items: [
               PaneItem(
-                icon: Icon(FluentIcons.home),
+                icon: Icon(Icons.home_outlined, size: 24),
                 title: Text('Inicio'),
               ),
               PaneItem(
-                icon: Icon(FluentIcons.car),
+                icon: Icon(Icons.car_rental_outlined, size: 24),
                 title: Text('Rentas'),
               ),
               PaneItem(
-                icon: Icon(FluentIcons.test_add),
+                icon: Icon(Icons.rate_review_outlined, size: 24),
                 title: Text('Inspecciones'),
               ),
               PaneItemSeparator(),
@@ -86,32 +76,43 @@ class NavigationPage extends StatelessWidget {
                 header: Text('Mantenimientos'),
               ),
               PaneItem(
-                icon: Icon(FluentIcons.car),
+                icon: Icon(Icons.car_repair_outlined, size: 24),
                 title: Text('Tipos de Vehiculos'),
               ),
               PaneItem(
-                icon: Icon(FluentIcons.verified_brand_solid),
+                icon: Icon(Icons.list_alt_outlined, size: 24),
                 title: Text('Marcas'),
               ),
               PaneItem(
-                icon: Icon(FluentIcons.transportation),
+                icon: Icon(Icons.checklist_rtl_outlined, size: 24),
                 title: Text('Modelos'),
               ),
               PaneItem(
-                icon: Icon(FluentIcons.transportation),
+                icon: Icon(Icons.local_gas_station_outlined, size: 24),
                 title: Text('Tipos de Combustibles'),
               ),
               PaneItem(
-                icon: Icon(FluentIcons.car),
+                icon: Icon(Icons.directions_car_outlined, size: 24),
                 title: Text('Vehiculos'),
               ),
               PaneItem(
-                icon: Icon(FluentIcons.people),
+                icon: Icon(Icons.group_outlined, size: 24),
                 title: Text('Clientes'),
               ),
               PaneItem(
-                icon: Icon(FluentIcons.employee_self_service),
+                icon: Icon(Icons.badge_outlined, size: 24),
                 title: Text('Empleados'),
+              ),
+            ],
+            footerItems: [
+              PaneItemAction(
+                onTap: () {
+                  Provider.of<UserStateViewModel>(context, listen: false)
+                      .removeCurrentUser();
+                  AutoRouter.of(context).replace(LoginRoute());
+                },
+                icon: Icon(Icons.exit_to_app_outlined, size: 24),
+                title: Text('Cerrar Sesion'),
               ),
             ],
           ),

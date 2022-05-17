@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:car_rental_app/domain/models/model.dart';
+import 'package:car_rental_app/ui/common/widgets/labeled_flied_widget.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 import '../../../../domain/enums/form_action_enum.dart';
@@ -38,47 +39,53 @@ class _CreateEditModelState extends State<CreateEditModel> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextFormBox(
-                  initialValue: widget.action == FORM_ACTION.CREATE
-                      ? formData.description
-                      : widget.data?.description,
-                  onSaved: ((newValue) {
-                    if (widget.action == FORM_ACTION.CREATE) {
-                      formData.description = newValue;
-                    } else {
-                      widget.data?.description = newValue;
-                    }
-                  }),
-                  placeholder: 'Descripcion',
-                  validator: (String? text) {
-                    if (text == null || text.isEmpty) return 'Requerido';
-                    return null;
-                  },
+                LabeledFieldWidget(
+                  label: 'Descripcion',
+                  child: TextFormBox(
+                    initialValue: widget.action == FORM_ACTION.CREATE
+                        ? formData.description
+                        : widget.data?.description,
+                    onSaved: ((newValue) {
+                      if (widget.action == FORM_ACTION.CREATE) {
+                        formData.description = newValue;
+                      } else {
+                        widget.data?.description = newValue;
+                      }
+                    }),
+                    placeholder: 'Descripcion',
+                    validator: (String? text) {
+                      if (text == null || text.isEmpty) return 'Requerido';
+                      return null;
+                    },
+                  ),
                 ),
                 SizedBox(height: 5),
-                Combobox<int>(
-                    placeholder: Text('Selecciona el modelo'),
-                    isExpanded: true,
-                    items: widget.brandList
-                        .map((e) => ComboboxItem<int>(
-                              value: e.id,
-                              child: Text('${e.description}'),
-                            ))
-                        .toList(),
-                    value: widget.action == FORM_ACTION.CREATE
-                        ? formData.brandId
-                        : widget.data?.brandId,
-                    onChanged: (value) {
-                      setState(() {
-                        if (value != null) {
-                          if (widget.action == FORM_ACTION.CREATE) {
-                            formData.brandId = value;
-                          } else {
-                            widget.data?.brandId = value;
+                LabeledFieldWidget(
+                  label: 'Marca',
+                  child: Combobox<int>(
+                      placeholder: Text('Selecciona'),
+                      isExpanded: true,
+                      items: widget.brandList
+                          .map((e) => ComboboxItem<int>(
+                                value: e.id,
+                                child: Text('${e.description}'),
+                              ))
+                          .toList(),
+                      value: widget.action == FORM_ACTION.CREATE
+                          ? formData.brandId
+                          : widget.data?.brandId,
+                      onChanged: (value) {
+                        setState(() {
+                          if (value != null) {
+                            if (widget.action == FORM_ACTION.CREATE) {
+                              formData.brandId = value;
+                            } else {
+                              widget.data?.brandId = value;
+                            }
                           }
-                        }
-                      });
-                    }),
+                        });
+                      }),
+                ),
                 SizedBox(height: 5),
                 Checkbox(
                   content: Text('Estado'),
