@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:car_rental_app/core/error/exceptions.dart';
 import 'package:car_rental_app/domain/models/brand.dart';
 import 'package:car_rental_app/ui/brand/pages/list_brand/list_brand_viewmodel.dart';
 import 'package:car_rental_app/ui/common/widgets/error_banner.dart';
@@ -124,14 +125,40 @@ class ListBrandPage extends StatelessWidget {
       } else {
         await viewModel.update(response);
       }
+      await AutoRouter.of(context).pop();
 
-      AutoRouter.of(context).pop();
-      viewModel.loadData();
+      var exception = viewModel.error(viewModel.createEditResponse);
+      if (exception != null) {
+        var error = exception as BaseException;
+        _showValidationMessage(context, error.cause);
+      } else {
+        viewModel.loadData();
+      }
     }
   }
 
-  Future<void> _showLoading(BuildContext context) async {
-    await fluent.showDialog<Brand?>(
+  void _showValidationMessage(BuildContext context, String message) {
+    fluent.showDialog(
+      context: context,
+      builder: (context) {
+        return ContentDialog(
+          title: Text('Informacion'),
+          content: Text(message),
+          actions: [
+            Button(
+              child: Text('Ok'),
+              onPressed: () {
+                AutoRouter.of(context).pop();
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  void _showLoading(BuildContext context) async {
+    fluent.showDialog<Brand?>(
       context: context,
       builder: (context) {
         return ContentDialog(

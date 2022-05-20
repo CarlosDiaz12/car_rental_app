@@ -2,11 +2,14 @@ import 'package:car_rental_app/domain/models/fuel_type.dart';
 import 'package:car_rental_app/domain/repository/fuel_type_repository_abstract.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../../../core/error/exceptions.dart';
+
 class ListFuelTypeViewModel extends BaseViewModel {
   FuelTypeRepositoryAbstract repository;
   List<FuelType>? _list;
   List<FuelType>? get list => _list;
   List<String> columnNames = ['Id', 'Descripcion', 'Estado', 'Acciones'];
+  BaseException createEditResponse = BaseException('');
   ListFuelTypeViewModel({
     required this.repository,
   });
@@ -28,7 +31,7 @@ class ListFuelTypeViewModel extends BaseViewModel {
     var res = await repository.create(data);
     var response = false;
     res.fold((ex) {
-      setError(ex);
+      setErrorForObject(createEditResponse, ex);
     }, (data) {
       response = data;
     });
@@ -40,7 +43,7 @@ class ListFuelTypeViewModel extends BaseViewModel {
     var res = await repository.update(data);
     var response = false;
     res.fold((ex) {
-      setError(ex);
+      setErrorForObject(createEditResponse, ex);
     }, (data) {
       response = data;
     });

@@ -2,11 +2,14 @@ import 'package:car_rental_app/domain/models/vehicle_type.dart';
 import 'package:car_rental_app/domain/repository/vehicle_type_respository_abstract.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../../../core/error/exceptions.dart';
+
 class ListVehicleTypeViewModel extends BaseViewModel {
   VehicleTypeRepositoryAbstract repository;
   List<VehicleType>? _vehicleTypeList;
   List<VehicleType>? get list => _vehicleTypeList;
   List<String> columnNames = ['Id', 'Descripcion', 'Estado', 'Acciones'];
+  BaseException createEditResponse = BaseException('');
   ListVehicleTypeViewModel({
     required this.repository,
   });
@@ -28,7 +31,7 @@ class ListVehicleTypeViewModel extends BaseViewModel {
     var res = await repository.create(data);
     var response = false;
     res.fold((ex) {
-      setError(ex);
+      setErrorForObject(createEditResponse, ex);
     }, (data) {
       response = data;
     });
@@ -40,7 +43,7 @@ class ListVehicleTypeViewModel extends BaseViewModel {
     var res = await repository.update(data);
     var response = false;
     res.fold((ex) {
-      setError(ex);
+      setErrorForObject(createEditResponse, ex);
     }, (data) {
       response = data;
     });
