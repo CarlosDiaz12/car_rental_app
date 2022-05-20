@@ -1,3 +1,4 @@
+import 'package:car_rental_app/core/error/exceptions.dart';
 import 'package:car_rental_app/domain/models/brand.dart';
 import 'package:stacked/stacked.dart';
 
@@ -8,6 +9,7 @@ class ListBrandViewModel extends BaseViewModel {
   List<Brand>? _list;
   List<Brand>? get list => _list;
   List<String> columnNames = ['Id', 'Descripcion', 'Estado', 'Acciones'];
+  BaseException createEditResponse = BaseException('');
   ListBrandViewModel({
     required this.repository,
   });
@@ -29,7 +31,7 @@ class ListBrandViewModel extends BaseViewModel {
     var res = await repository.create(data);
     var response = false;
     res.fold((ex) {
-      setError(ex);
+      setErrorForObject(createEditResponse, ex);
     }, (data) {
       response = data;
     });
@@ -41,7 +43,7 @@ class ListBrandViewModel extends BaseViewModel {
     var res = await repository.update(data);
     var response = false;
     res.fold((ex) {
-      setError(ex);
+      setErrorForObject(createEditResponse, ex);
     }, (data) {
       response = data;
     });

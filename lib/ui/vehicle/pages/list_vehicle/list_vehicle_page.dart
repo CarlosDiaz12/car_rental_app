@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../../../core/error/exceptions.dart';
 import '../../../../domain/enums/form_action_enum.dart';
 import '../../../../domain/repository/vehicle_type_respository_abstract.dart';
 import '../../../common/view_utils.dart';
@@ -151,10 +152,36 @@ class ListVehiclePage extends StatelessWidget {
       } else {
         await viewModel.update(response);
       }
+      await AutoRouter.of(context).pop();
 
-      AutoRouter.of(context).pop();
-      viewModel.loadData();
+      var exception = viewModel.error(viewModel.createEditResponse);
+      if (exception != null) {
+        var error = exception as BaseException;
+        _showValidationMessage(context, error.cause);
+      } else {
+        viewModel.loadData();
+      }
     }
+  }
+
+  void _showValidationMessage(BuildContext context, String message) {
+    fluent.showDialog(
+      context: context,
+      builder: (context) {
+        return ContentDialog(
+          title: Text('Informacion'),
+          content: Text(message),
+          actions: [
+            Button(
+              child: Text('Ok'),
+              onPressed: () {
+                AutoRouter.of(context).pop();
+              },
+            )
+          ],
+        );
+      },
+    );
   }
 
   Future<void> _showLoading(BuildContext context) async {

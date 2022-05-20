@@ -2,10 +2,13 @@ import 'package:car_rental_app/domain/models/employee.dart';
 import 'package:car_rental_app/domain/repository/employee_respository_abstract.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../../../core/error/exceptions.dart';
+
 class ListEmployeeViewModel extends BaseViewModel {
   EmployeeRepositoryAbstract repository;
   List<Employee>? _list;
   List<Employee>? get list => _list;
+  BaseException createEditResponse = BaseException('');
   List<String> columnNames = [
     'Id',
     'Nombre',
@@ -37,7 +40,7 @@ class ListEmployeeViewModel extends BaseViewModel {
     var res = await repository.create(data);
     var response = false;
     res.fold((ex) {
-      setError(ex);
+      setErrorForObject(createEditResponse, ex);
     }, (data) {
       response = data;
     });
@@ -49,7 +52,7 @@ class ListEmployeeViewModel extends BaseViewModel {
     var res = await repository.update(data);
     var response = false;
     res.fold((ex) {
-      setError(ex);
+      setErrorForObject(createEditResponse, ex);
     }, (data) {
       response = data;
     });

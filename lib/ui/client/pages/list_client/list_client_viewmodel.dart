@@ -2,10 +2,13 @@ import 'package:car_rental_app/domain/models/client.dart';
 import 'package:car_rental_app/domain/repository/client_repository_abstract.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../../../core/error/exceptions.dart';
+
 class ListClientViewModel extends BaseViewModel {
   ClientRepositoryAbstract repository;
   List<Client>? _list;
   List<Client>? get list => _list;
+  BaseException createEditResponse = BaseException('');
   List<String> columnNames = [
     'Id',
     'Nombre',
@@ -37,7 +40,7 @@ class ListClientViewModel extends BaseViewModel {
     var res = await repository.create(data);
     var response = false;
     res.fold((ex) {
-      setError(ex);
+      setErrorForObject(createEditResponse, ex);
     }, (data) {
       response = data;
     });
@@ -49,7 +52,7 @@ class ListClientViewModel extends BaseViewModel {
     var res = await repository.update(data);
     var response = false;
     res.fold((ex) {
-      setError(ex);
+      setErrorForObject(createEditResponse, ex);
     }, (data) {
       response = data;
     });

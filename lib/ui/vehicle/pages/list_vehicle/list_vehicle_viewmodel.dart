@@ -10,6 +10,8 @@ import 'package:car_rental_app/domain/repository/vehicle_repository_abstract.dar
 import 'package:car_rental_app/domain/repository/vehicle_type_respository_abstract.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../../../core/error/exceptions.dart';
+
 class ListVehicleViewModel extends BaseViewModel {
   VehicleRepositoryAbstract repository;
   VehicleTypeRepositoryAbstract vehicleTypeRepository;
@@ -44,6 +46,7 @@ class ListVehicleViewModel extends BaseViewModel {
     'Estado',
     'Acciones'
   ];
+  BaseException createEditResponse = BaseException('');
   ListVehicleViewModel({
     required this.vehicleTypeRepository,
     required this.brandRepository,
@@ -106,7 +109,7 @@ class ListVehicleViewModel extends BaseViewModel {
     var res = await repository.create(data);
     var response = false;
     res.fold((ex) {
-      setError(ex);
+      setErrorForObject(createEditResponse, ex);
     }, (data) {
       response = data;
     });
@@ -118,7 +121,7 @@ class ListVehicleViewModel extends BaseViewModel {
     var res = await repository.update(data);
     var response = false;
     res.fold((ex) {
-      setError(ex);
+      setErrorForObject(createEditResponse, ex);
     }, (data) {
       response = data;
     });

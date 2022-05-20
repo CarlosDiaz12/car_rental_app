@@ -40,6 +40,9 @@ class EmployeeRepository extends EmployeeRepositoryAbstract {
       var response = request.data['data'];
       return Right(response);
     } on DioError catch (e) {
+      if (e.response?.statusCode == 400) {
+        return Left(UnknownErrorException(e.response?.data['errorMessage']));
+      }
       if (e.response?.statusCode == 404) {
         return Left(NotFoundException());
       }
@@ -84,6 +87,9 @@ class EmployeeRepository extends EmployeeRepositoryAbstract {
       var response = request.data['data'];
       return Right(response);
     } on DioError catch (e) {
+      if (e.response?.statusCode == 400) {
+        return Left(UnknownErrorException(e.response?.data['errorMessage']));
+      }
       if (e.response?.statusCode == 404) {
         return Left(NotFoundException());
       }
