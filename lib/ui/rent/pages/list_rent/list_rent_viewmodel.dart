@@ -48,7 +48,7 @@ class ListRentViewModel extends BaseViewModel {
     'Devolucion',
     'Monto x Dia',
     'Cant. Dias',
-    'Estado',
+    'Devuelto',
     'Acciones'
   ];
 
@@ -213,6 +213,18 @@ class ListRentViewModel extends BaseViewModel {
   Future<bool> delete(int id) async {
     clearErrors();
     var res = await repository.delete(id);
+    var response = false;
+    res.fold((ex) {
+      setError(ex);
+    }, (data) {
+      response = data;
+    });
+    return response;
+  }
+
+  Future<bool> completeRent(int id) async {
+    clearErrors();
+    var res = await repository.completeRent(id);
     var response = false;
     res.fold((ex) {
       setError(ex);

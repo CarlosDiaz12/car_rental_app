@@ -383,7 +383,7 @@ class _CreateEditInspectionState extends State<CreateEditInspection> {
                                 if (widget.action == FORM_ACTION.CREATE) {
                                   formData.inspectionDate = value;
                                 } else {
-                                  widget.data?.inspectionDate = value;
+                                  //widget.data?.inspectionDate = value;
                                 }
                               },
                             )

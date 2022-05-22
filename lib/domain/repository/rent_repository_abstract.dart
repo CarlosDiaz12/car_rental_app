@@ -5,4 +5,5 @@ import 'package:dartz/dartz.dart';
 
 abstract class RentRepositoryAbstract extends BaseRepositoryAbstract<Rent> {
   Future<Either<Exception, bool>> isAvailableForRent(IsAvailableForRentDto dto);
+  Future<Either<Exception, bool>> completeRent(int rentId);
 }

@@ -20,7 +20,7 @@ class ViewUtils {
       );
 
   static DataCell buildActionTableCell(
-          {required Widget child, required Function() onTap}) =>
+          {required Widget child, required Function()? onTap}) =>
       DataCell(
         Container(
           alignment: Alignment.centerLeft,
@@ -31,11 +31,13 @@ class ViewUtils {
         onTap: onTap,
       );
 
-  static Widget confirmDialog(BuildContext context) => ContentDialog(
-        title: Text('Desea eliminar?'),
+  static Widget confirmDialog(BuildContext context,
+          [String message = 'Confirmar accion?']) =>
+      ContentDialog(
+        title: Text(message),
         actions: [
           Button(
-            child: Text('Eliminar'),
+            child: Text('Confirmar'),
             onPressed: () {
               AutoRouter.of(context).pop(true);
             },

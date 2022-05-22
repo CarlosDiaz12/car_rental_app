@@ -126,4 +126,25 @@ class RentRepository extends RentRepositoryAbstract {
       return Left(UnknownErrorException('Error inesperado: ${e.toString()}'));
     }
   }
+
+  @override
+  Future<Either<Exception, bool>> completeRent(int rentId) async {
+    try {
+      var request = await _client.put(
+        '/rent/$rentId/complete',
+      );
+      var response = request.data['data'];
+      return Right(response);
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 404) {
+        return Left(NotFoundException());
+      }
+      if (e.response?.statusCode == 401) {
+        return Left(NotAuthorizedException());
+      }
+      return Left(ServerException(null, e.response?.statusCode ?? 500));
+    } catch (e) {
+      return Left(UnknownErrorException('Error inesperado: ${e.toString()}'));
+    }
+  }
 }
