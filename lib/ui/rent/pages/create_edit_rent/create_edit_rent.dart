@@ -45,6 +45,11 @@ class _CreateEditRentState extends State<CreateEditRent> {
   final formKey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var title = widget.action == FORM_ACTION.CREATE ? 'Crear' : 'Editar';
     var labelStyle = FluentTheme.of(context).typography.body?.copyWith(
@@ -57,7 +62,7 @@ class _CreateEditRentState extends State<CreateEditRent> {
               : formData.daysQuantity.toString()
           : widget.data?.daysQuantity.toString(),
     );
-
+    _calculateDaysQuantityRent(daysQuantityController);
     return ContentDialog(
       constraints: BoxConstraints(
         maxHeight: MediaQuery.of(context).size.height * 0.70,
@@ -130,7 +135,7 @@ class _CreateEditRentState extends State<CreateEditRent> {
                                   if (widget.action == FORM_ACTION.CREATE) {
                                     formData.vehicleId = value;
                                   } else {
-                                    widget.data?.vehicleId = value;
+                                    //widget.data?.vehicleId = value;
                                   }
                                 }
                               });
@@ -160,7 +165,7 @@ class _CreateEditRentState extends State<CreateEditRent> {
                                   if (widget.action == FORM_ACTION.CREATE) {
                                     formData.clientId = value;
                                   } else {
-                                    widget.data?.clientId = value;
+                                    //widget.data?.clientId = value;
                                   }
                                 }
                               });
@@ -190,7 +195,7 @@ class _CreateEditRentState extends State<CreateEditRent> {
                                 if (widget.action == FORM_ACTION.CREATE) {
                                   formData.rentDate = value;
                                 } else {
-                                  widget.data?.rentDate = value;
+                                  //widget.data?.rentDate = value;
                                 }
                                 _calculateDaysQuantityRent(
                                     daysQuantityController);
@@ -213,7 +218,7 @@ class _CreateEditRentState extends State<CreateEditRent> {
                                 if (widget.action == FORM_ACTION.CREATE) {
                                   formData.returnDate = value;
                                 } else {
-                                  widget.data?.returnDate = value;
+                                  // widget.data?.returnDate = value;
                                 }
                                 _calculateDaysQuantityRent(
                                     daysQuantityController);
@@ -334,11 +339,6 @@ class _CreateEditRentState extends State<CreateEditRent> {
                               }
                             }),
                             placeholder: 'Cantidad de dias',
-                            validator: (String? text) {
-                              if (text == null || text.isEmpty || text == '0')
-                                return 'Requerido';
-                              return null;
-                            },
                           ),
                         ),
                       ),
@@ -373,41 +373,53 @@ class _CreateEditRentState extends State<CreateEditRent> {
       actions: [
         Button(
           onPressed: () async {
-            // DATE VALIDATION
-            var rentDate = (widget.data?.rentDate ?? formData.rentDate)!;
-            var rentDateUtc =
-                DateTime.utc(rentDate.year, rentDate.month, rentDate.day);
-            var dateNow = DateTime.now();
-            var currentDateUtc =
-                DateTime.utc(dateNow.year, dateNow.month, dateNow.day);
-            if (rentDateUtc.compareTo(currentDateUtc) < 0) {
-              _showValidationMessage(context, 'Fecha de renta no valida.');
-              return;
-            }
-            var returnDate = (widget.data?.returnDate ?? formData.returnDate)!;
-            var returnDateUtc =
-                DateTime.utc(returnDate.year, returnDate.month, returnDate.day);
-            if (returnDateUtc.compareTo(rentDateUtc) < 0) {
-              _showValidationMessage(context, 'Fecha de devolución no valida.');
-              return;
-            }
+            // DATE VALIDATION: just for create
+            var rentDate = (widget.action == FORM_ACTION.CREATE
+                ? formData.rentDate
+                : widget.data?.rentDate)!;
+            var returnDate = (widget.action == FORM_ACTION.CREATE
+                ? formData.returnDate
+                : widget.data?.returnDate)!;
+            if (widget.action == FORM_ACTION.CREATE) {
+              var rentDateUtc =
+                  DateTime.utc(rentDate.year, rentDate.month, rentDate.day);
+              var dateNow = DateTime.now();
+              var currentDateUtc =
+                  DateTime.utc(dateNow.year, dateNow.month, dateNow.day);
+              if (rentDateUtc.compareTo(currentDateUtc) < 0) {
+                _showValidationMessage(context, 'Fecha de renta no valida.');
+                return;
+              }
 
+              var returnDateUtc = DateTime.utc(
+                  returnDate.year, returnDate.month, returnDate.day);
+              if (returnDateUtc.compareTo(rentDateUtc) < 0) {
+                _showValidationMessage(
+                    context, 'Fecha de devolución no valida.');
+                return;
+              }
+            }
             var resultData =
                 (widget.action == FORM_ACTION.CREATE ? formData : widget.data)!;
-            var inspected = await widget.viewModel
-                .checkAvailability(CheckVehicleAvailabilityDto(
-              clientId: resultData.clientId!,
-              vehicleId: resultData.vehicleId!,
-              inspectionDate: DateTime.now(),
-              type: InspectionType.IN,
-            ));
 
-            var availableForRent = await widget.viewModel
-                .checkAvailabilityForRent(IsAvailableForRentDto(
-              vehicleId: resultData.vehicleId!,
-              rentDate: rentDate,
-              returnDate: returnDate,
-            ));
+            var inspected = true;
+            var availableForRent = true;
+            if (widget.action == FORM_ACTION.CREATE) {
+              inspected = await widget.viewModel
+                  .checkAvailability(CheckVehicleAvailabilityDto(
+                clientId: resultData.clientId!,
+                vehicleId: resultData.vehicleId!,
+                inspectionDate: DateTime.now(),
+                type: InspectionType.IN,
+              ));
+
+              availableForRent = await widget.viewModel
+                  .checkAvailabilityForRent(IsAvailableForRentDto(
+                vehicleId: resultData.vehicleId!,
+                rentDate: rentDate,
+                returnDate: returnDate,
+              ));
+            }
 
             if (formKey.currentState!.validate() &&
                 resultData.clientId != null &&
@@ -449,7 +461,9 @@ class _CreateEditRentState extends State<CreateEditRent> {
         DateTime.utc(returnDate.year, returnDate.month, returnDate.day);
     var daysQuantity =
         (returnDateUtc.difference(rentDateUtc).inHours / 24).round();
-
+    if (daysQuantity == 0) {
+      daysQuantity = 1;
+    }
     if (widget.action == FORM_ACTION.CREATE) {
       formData.daysQuantity = daysQuantity;
     } else {

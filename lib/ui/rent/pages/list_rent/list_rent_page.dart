@@ -168,9 +168,7 @@ class ListRentPage extends StatelessWidget {
                                       ViewUtils.buildTableCell(e.ratePerDay),
                                       ViewUtils.buildTableCell(e.daysQuantity),
                                       ViewUtils.buildTableCell(
-                                          (e.status == true)
-                                              ? 'Activo'
-                                              : 'Inactivo'),
+                                          (e.returned == true) ? 'Si' : 'No'),
                                       ViewUtils.buildActionTableCell(
                                         child: Icon(fluent.FluentIcons.delete),
                                         onTap: () async {

@@ -48,7 +48,7 @@ class ListRentViewModel extends BaseViewModel {
     'Devolucion',
     'Monto x Dia',
     'Cant. Dias',
-    'Estado',
+    'Devuelto',
     'Acciones'
   ];
 
