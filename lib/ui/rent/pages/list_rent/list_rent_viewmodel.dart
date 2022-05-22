@@ -221,4 +221,16 @@ class ListRentViewModel extends BaseViewModel {
     });
     return response;
   }
+
+  Future<bool> completeRent(int id) async {
+    clearErrors();
+    var res = await repository.completeRent(id);
+    var response = false;
+    res.fold((ex) {
+      setError(ex);
+    }, (data) {
+      response = data;
+    });
+    return response;
+  }
 }

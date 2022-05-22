@@ -170,18 +170,56 @@ class ListRentPage extends StatelessWidget {
                                       ViewUtils.buildTableCell(
                                           (e.returned == true) ? 'Si' : 'No'),
                                       ViewUtils.buildActionTableCell(
-                                        child: Icon(fluent.FluentIcons.delete),
-                                        onTap: () async {
-                                          var delete =
-                                              await _showConfirmDialog(context);
-                                          if (delete) {
-                                            _showLoading(context);
-                                            await viewModel.delete(e.id!);
-                                            AutoRouter.of(context).pop();
-                                            await viewModel.loadData();
-                                          }
-                                        },
-                                      )
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            fluent.IconButton(
+                                              icon: Icon(
+                                                fluent.FluentIcons.delete,
+                                                size: 16,
+                                              ),
+                                              onPressed: () async {
+                                                var delete =
+                                                    await _showConfirmDialog(
+                                                        context,
+                                                        'Desea eliminar?');
+                                                if (delete) {
+                                                  _showLoading(context);
+                                                  await viewModel.delete(e.id!);
+                                                  AutoRouter.of(context).pop();
+                                                  await viewModel.loadData();
+                                                }
+                                              },
+                                            ),
+                                            fluent.IconButton(
+                                              icon: Icon(
+                                                fluent.FluentIcons.completed,
+                                                size: 16,
+                                              ),
+                                              onPressed: e.returned!
+                                                  ? null
+                                                  : () async {
+                                                      var delete =
+                                                          await _showConfirmDialog(
+                                                              context,
+                                                              'Desea completar renta?');
+                                                      if (delete) {
+                                                        _showLoading(context);
+                                                        await viewModel
+                                                            .completeRent(
+                                                                e.id!);
+                                                        AutoRouter.of(context)
+                                                            .pop();
+                                                        await viewModel
+                                                            .loadData();
+                                                      }
+                                                    },
+                                            ),
+                                          ],
+                                        ),
+                                        onTap: null,
+                                      ),
                                     ],
                                   ),
                                 )
@@ -196,9 +234,10 @@ class ListRentPage extends StatelessWidget {
     );
   }
 
-  Future<bool> _showConfirmDialog(BuildContext context) async {
+  Future<bool> _showConfirmDialog(BuildContext context, String message) async {
     var response = await fluent.showDialog(
-        context: context, builder: (ctx) => ViewUtils.confirmDialog(context));
+        context: context,
+        builder: (ctx) => ViewUtils.confirmDialog(context, message));
     return (response != null && response == true);
   }
 
