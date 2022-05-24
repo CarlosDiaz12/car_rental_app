@@ -72,7 +72,8 @@ class ListModelPage extends StatelessWidget {
                                         },
                                       ),
                                       ViewUtils.buildTableCell(e.description),
-                                      ViewUtils.buildTableCell(e.brandId),
+                                      ViewUtils.buildTableCell(
+                                          e.brand?.description),
                                       ViewUtils.buildTableCell(
                                           (e.status == true)
                                               ? 'Activo'

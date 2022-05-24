@@ -1,16 +1,39 @@
-# car_rental_system
+# Flutter Car Rental Windows System
 
-A new Flutter project.
+A flutter system to manage rent car dealers.
 
-## Getting Started
+### Process Modules:
 
-This project is a starting point for a Flutter application.
+- Rent / Return module
+- Inspections module
 
-A few resources to get you started if this is your first Flutter project:
+### Maintenance modules:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+- Clients module
+- Brands module
+- Vehicles module
+- Employees module
+- Vehicle Types module
+- Models module
+- Brands module
+- Fuel Types module
+- Auth Module (Simple User/Password Login System)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Setup
+
+Add a .env file to the root directory and the content should be:
+
+- API_URL_BASE=backend url here Backend URL: https://github.com/CarlosDiaz12/CarRentalBackend
+
+## Libraries used
+
+- Stacked (State Managment)
+- Provider
+- AutoRoute for routing
+- Dio for Http Calls
+- flutter_dotenv for enviroment variables
+- fluent_ui package for windows look and feel
+- open_file to open excel files
+- syncfusion_flutter_xlsio for creating excel files
+- dartz for managing methods responses
+- mask_text_input_formatter for identification card mask
