@@ -33,7 +33,6 @@ class VehicleTypeRepository extends VehicleTypeRepositoryAbstract {
   @override
   Future<Either<Exception, bool>> create(VehicleType object) async {
     try {
-      object.id = 0;
       var request = await _client.post(
         '/vehicleType',
         data: object.toMap(),

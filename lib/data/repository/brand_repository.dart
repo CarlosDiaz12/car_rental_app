@@ -32,7 +32,6 @@ class BrandRepository extends BrandRepositoryAbstract {
   @override
   Future<Either<Exception, bool>> create(Brand object) async {
     try {
-      object.id = 0;
       var request = await _client.post(
         '/brand',
         data: object.toMap(),

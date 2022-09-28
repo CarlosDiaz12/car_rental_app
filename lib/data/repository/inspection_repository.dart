@@ -33,7 +33,6 @@ class InspectionRepository extends InspectionRepositoryAbstract {
   @override
   Future<Either<Exception, bool>> create(Inspection object) async {
     try {
-      object.id = 0;
       var request = await _client.post(
         '/inspection',
         data: object.toMap(),

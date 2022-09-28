@@ -33,7 +33,6 @@ class ModelRepository extends ModelRepositoryAbstract {
   @override
   Future<Either<Exception, bool>> create(Model object) async {
     try {
-      object.id = 0;
       var request = await _client.post(
         '/model',
         data: object.toMap(),

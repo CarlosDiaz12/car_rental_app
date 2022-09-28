@@ -34,10 +34,6 @@ class RentRepository extends RentRepositoryAbstract {
   @override
   Future<Either<Exception, bool>> create(Rent object) async {
     try {
-      object.client = null;
-      object.employee = null;
-      object.vehicle = null;
-      object.id = 0;
       var request = await _client.post(
         '/rent',
         data: object.toMap(),

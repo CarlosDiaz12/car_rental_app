@@ -32,7 +32,6 @@ class FuelTypeRepository extends FuelTypeRepositoryAbstract {
   @override
   Future<Either<Exception, bool>> create(FuelType object) async {
     try {
-      object.id = 0;
       var request = await _client.post(
         '/fueltype',
         data: object.toMap(),

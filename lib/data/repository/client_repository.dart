@@ -33,7 +33,6 @@ class ClientRepository extends ClientRepositoryAbstract {
   @override
   Future<Either<Exception, bool>> create(Client object) async {
     try {
-      object.id = 0;
       var request = await _client.post(
         '/client',
         data: object.toMap(),

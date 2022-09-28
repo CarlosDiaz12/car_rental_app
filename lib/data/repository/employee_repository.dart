@@ -32,7 +32,6 @@ class EmployeeRepository extends EmployeeRepositoryAbstract {
   @override
   Future<Either<Exception, bool>> create(Employee object) async {
     try {
-      object.id = 0;
       var request = await _client.post(
         '/employee',
         data: object.toMap(),
